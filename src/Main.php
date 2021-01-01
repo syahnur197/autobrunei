@@ -16,6 +16,7 @@ use Autobrunei\Utils\Loader;
 use Autobrunei\Utils\Internationalization;
 use Autobrunei\Admin\Controller as AdminController;
 use Autobrunei\Front\Controller as FrontController;
+use Autobrunei\Models\Listing;
 
 /**
  * The core plugin class.
@@ -30,6 +31,8 @@ use Autobrunei\Front\Controller as FrontController;
  * @author     Sand Eater <sandeater@autobrunei.com>
  */
 class Main {
+
+	const PLUGIN_DIR = ABSPATH . 'wp-content/plugins/autobrunei/';
 
 	/**
 	 * The loader that's responsible for maintaining and registering all hooks that power
@@ -112,10 +115,14 @@ class Main {
 	 */
 	private function define_admin_hooks() {
 
-		$plugin_admin = new AdminController( $this->get_plugin_name(), $this->get_version() );
+		$plugin_admin  = new AdminController( $this->get_plugin_name(), $this->get_version() );
+		$listing_model = new Listing();
 
 		$this->loader->add_action( 'admin_enqueue_scripts', $plugin_admin, 'enqueue_styles' );
 		$this->loader->add_action( 'admin_enqueue_scripts', $plugin_admin, 'enqueue_scripts' );
+
+		// listing post type and metas
+		$this->loader->add_action('init', $listing_model, 'create_post_type');
 
 	}
 
@@ -179,5 +186,26 @@ class Main {
 	public function get_version() {
 		return $this->version;
 	}
+
+	public static function get_path_from_root(string $path): string
+	{
+
+		if ($path[0] === "/") {
+			$path = substr($path, 1);
+		}
+
+		return self::PLUGIN_DIR . $path;
+	}
+
+	public static function get_path_from_src(string $path): string
+	{
+		if ($path[0] === "/") {
+			$path = substr($path, 1);
+		}
+		
+		return self::PLUGIN_DIR . 'src/' . $path;
+	}
+
+
 
 }
