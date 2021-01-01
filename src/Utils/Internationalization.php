@@ -6,11 +6,11 @@
  * Loads and defines the internationalization files for this plugin
  * so that it is ready for translation.
  *
- * @link       http://example.com
+ * @link       http://autobrunei.com
  * @since      1.0.0
  */
 
-namespace PluginName\Utils;
+namespace Autobrunei\Utils;
 
 /**
  * Define the internationalization functionality.

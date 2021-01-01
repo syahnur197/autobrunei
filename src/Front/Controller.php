@@ -3,11 +3,11 @@
 /**
  * The public-facing functionality of the plugin.
  *
- * @link       http://example.com
+ * @link       http://autobrunei.com
  * @since      1.0.0
  */
 
-namespace PluginName\Front;
+namespace Autobrunei\Front;
 
 
 /**
@@ -74,7 +74,7 @@ class Controller {
 		 * class.
 		 */
 
-		wp_enqueue_style( $this->plugin_name, plugin_dir_url( __FILE__ ) . 'css/plugin-name-public.css', array(), $this->version, 'all' );
+		wp_enqueue_style( $this->plugin_name, plugin_dir_url( __FILE__ ) . 'css/auto-brunei-public.css', array(), $this->version, 'all' );
 
 	}
 
@@ -98,7 +98,7 @@ class Controller {
 		 * class.
 		 */
 
-		wp_enqueue_script( $this->plugin_name, plugin_dir_url( __FILE__ ) . 'js/plugin-name-public.js', array( 'jquery' ), $this->version, false );
+		wp_enqueue_script( $this->plugin_name, plugin_dir_url( __FILE__ ) . 'js/auto-brunei-public.js', array( 'jquery' ), $this->version, false );
 
 	}
 

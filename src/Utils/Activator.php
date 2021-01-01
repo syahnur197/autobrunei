@@ -3,11 +3,11 @@
 /**
  * Fired during plugin activation
  *
- * @link       http://example.com
+ * @link       http://autobrunei.com
  * @since      1.0.0
  */
 
-namespace PluginName\Utils;
+namespace Autobrunei\Utils;
 
 /**
  * Fired during plugin activation.

@@ -1,28 +1,33 @@
 {
-	"name" : "vendor/plugin-name",
+	"name" : "autobrunei/auto-brunei",
 	"description" : "The description of your plugin.",
 	"type" : "wordpress-plugin",
 	"keywords" : [ "wordpress" ],
 	"license" : "GPL-2.0+",
 	"authors" : [
 		{
-			"name" : "David Aguilera",
-			"email" : "david.aguilera@neliosoftware.com",
+			"name" : "Khairul Kifle",
+			"email" : "khairul.kifle@autobrunei.com",
 			"role" : "Lead Developer"
 		},
 		{
-			"name" : "Antonio Villegas",
-			"email" : "antonio.villegas@neliosoftware.com",
-			"role" : "Developer"
+			"name" : "Shaadiq Hamid",
+			"email" : "shaadiq.hamid@autobrunei.com",
+			"role" : "Conspiracy Theorist"
+		},
+		{
+			"name" : "Haziq Hamid",
+			"email" : "haziq.hamid@autobrunei.com",
+			"role" : "Sand Investigator"
 		}
 	],
 	"autoload" : {
 		"psr-4" : {
-			"PluginName\\" : "src"
+			"Autobrunei\\" : "src"
 		}
 	},
 	"require" : {
 		"php" : ">=5.3.0"
 	},
-	"homepage" : "http://example.com/plugin-name"
+	"homepage" : "http://autobrunei.com/auto-brunei"
 }

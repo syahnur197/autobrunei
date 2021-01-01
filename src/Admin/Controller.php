@@ -3,11 +3,11 @@
 /**
  * The admin-specific functionality of the plugin.
  *
- * @link       http://example.com
+ * @link       http://autobrunei.com
  * @since      1.0.0
  */
 
-namespace PluginName\Admin;
+namespace Autobrunei\Admin;
 
 /**
  * The admin-specific functionality of the plugin.
@@ -70,7 +70,7 @@ class Controller {
 		 * class.
 		 */
 
-		wp_enqueue_style( $this->plugin_name, plugin_dir_url( __FILE__ ) . 'css/plugin-name-admin.css', array(), $this->version, 'all' );
+		wp_enqueue_style( $this->plugin_name, plugin_dir_url( __FILE__ ) . 'css/auto-brunei-admin.css', array(), $this->version, 'all' );
 
 	}
 
@@ -93,7 +93,7 @@ class Controller {
 		 * class.
 		 */
 
-		wp_enqueue_script( $this->plugin_name, plugin_dir_url( __FILE__ ) . 'js/plugin-name-admin.js', array( 'jquery' ), $this->version, false );
+		wp_enqueue_script( $this->plugin_name, plugin_dir_url( __FILE__ ) . 'js/auto-brunei-admin.js', array( 'jquery' ), $this->version, false );
 
 	}
 

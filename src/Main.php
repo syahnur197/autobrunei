@@ -6,16 +6,16 @@
  * A class definition that includes attributes and functions used across both the
  * public-facing side of the site and the admin area.
  *
- * @link       http://example.com
+ * @link       http://autobrunei.com
  * @since      1.0.0
  */
 
-namespace PluginName;
+namespace Autobrunei;
 
-use PluginName\Utils\Loader;
-use PluginName\Utils\Internationalization;
-use PluginName\Admin\Controller as AdminController;
-use PluginName\Front\Controller as FrontController;
+use Autobrunei\Utils\Loader;
+use Autobrunei\Utils\Internationalization;
+use Autobrunei\Admin\Controller as AdminController;
+use Autobrunei\Front\Controller as FrontController;
 
 /**
  * The core plugin class.
@@ -27,7 +27,7 @@ use PluginName\Front\Controller as FrontController;
  * version of the plugin.
  *
  * @since      1.0.0
- * @author     Your Name <email@example.com>
+ * @author     Sand Eater <sandeater@autobrunei.com>
  */
 class Main {
 
@@ -73,7 +73,7 @@ class Main {
 	 */
 	public function __construct() {
 
-		$this->plugin_name = 'plugin-name';
+		$this->plugin_name = 'auto-brunei';
 		$this->version = '1.0.0';
 		$this->loader = new Loader();
 
