@@ -8,5 +8,4 @@
             <button class="ab-btn ab-btn-danger ab-delete-feature-btn" type="button">Delete</button>
         </div>
     </div>
-
 </div>

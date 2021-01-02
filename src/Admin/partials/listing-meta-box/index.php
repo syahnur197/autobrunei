@@ -3,6 +3,7 @@
     <div class="ab-content">
         <?php require_once "_content-basic-car-info.php"; ?>
         <?php require_once "_content-features.php"; ?>
+        <?php require_once "_content-price.php"; ?>
     </div>
 </div>
 
