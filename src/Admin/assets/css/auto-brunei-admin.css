@@ -1,0 +1,122 @@
+/**
+ * All of the CSS for your admin-specific functionality should be
+ * included in this file.
+ */
+
+#ab-listings-id .inside {
+    padding-left: 0 !important;
+    padding-bottom: 0 !important;
+    margin-top: 0 !important;
+}
+
+.ab-list-item {
+    background-color: #e5e5e5;
+    padding: 0.7em 0.3em;
+    font-weight: bold;
+    cursor: pointer;
+    color: black;
+    border-bottom: 1px solid #eee;
+}
+
+.ab-list-item:hover {
+    background-color: #ffffff;
+    color: #0073AA;
+}
+
+.ab-list-item.active {
+    background-color: #0073aa !important;
+    color: #fff !important;
+}
+
+.ab-content {
+    padding: 1em;
+}
+
+.ab-form-layout {
+    display: grid;
+    grid-template-columns: 15% 85%;
+    margin: 0 !important;
+    min-height: 600px;
+}
+
+.ab-meta-grid {
+    display: grid;
+    grid-template-columns: 20% 80%;
+    margin-bottom: 10px;
+}
+
+.ab-sidebar {
+    background-color: #FAFAFA !important;
+}
+
+.ab-h2 {
+    font-weight: bold !important;
+    font-size: 1.5em !important;
+}
+
+.no-left-padding {
+    padding-left: 0px !important;
+}
+
+.ab-btn {
+    text-decoration: none;
+    text-shadow: none;
+    font-size: 13px;
+    cursor: pointer;
+    border-width: 1px;
+    border-style: solid;
+    box-sizing: border-box;
+    padding: 0 21px !important;
+    height: 40px !important;
+    line-height: 40px !important;
+    border-radius: 3px;
+}
+
+.ab-btn.ab-btn-primary {
+    background: #007cba;
+    border-color: #007cba;
+    color: #fff;
+}
+
+.ab-btn.ab-btn-primary:hover {
+    background: #0071A1;
+    border-color: #0071A1;
+    color: #fff;
+}
+
+.ab-btn.ab-btn-danger {
+    background: #ce1f1f;
+    border-color: #cf1d3a;
+    color: #fff;
+}
+
+.ab-btn.ab-btn-danger:hover {
+    background: #ba0000;
+    border-color: #ba001f;
+    color: #fff;
+}
+
+.ab-d-block {
+    display: block;
+}
+
+.ab-d-hide {
+    display: none;
+}
+
+.ab-form-control {
+    height: 40px;
+    line-height: 40px;
+    padding: 5px 20px;
+    border-radius: 4px !important;
+    font-size: 14px;
+    width: 100%;
+}
+
+.ab-feature-row {
+    display: grid;
+    grid-template-columns: 90% 10%;
+    column-gap: 1em;
+    margin-top: 0.5em;
+    margin-bottom: 0.5em;
+}

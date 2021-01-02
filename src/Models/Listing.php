@@ -3,6 +3,7 @@
 namespace Autobrunei\Models;
 
 use Autobrunei\Main;
+use Autobrunei\Utils\Config;
 
 /**
  * Aku pakai interface just to make the models methods are consistent
@@ -25,7 +26,7 @@ class Listing implements ModelInterface
         );
     
         $supports = array(
-            'title',
+            'title', 'editor',
         );
         
         $args = array(
@@ -48,7 +49,7 @@ class Listing implements ModelInterface
     public function add_meta_boxes()
     {
         add_meta_box(
-            'autobrunei_listings_id',
+            'ab-listings-id',
             'Listing',
             [$this, 'meta_box'],
             'listings',
@@ -61,6 +62,14 @@ class Listing implements ModelInterface
     {
         global $pagenow;
 
+        // arrays of values for dropdowns
+        $brands_arr            = Config::get_brands();
+        $transmissions_arr     = Config::get_transmissions();
+        $body_types_arr        = Config::get_body_types();
+        $conditions_arr        = Config::get_condititons();
+        $fuel_types_arr        = Config::get_fuel_types();
+        $drive_types_arr       = Config::get_drive_types();
+
         $is_new_page    = $pagenow === 'post-new.php';
 
         $listing            = get_post($post->ID);
@@ -71,7 +80,7 @@ class Listing implements ModelInterface
         $body_type          = esc_textarea($listing->body_type);
         $additional_info    = esc_textarea($listing->additional_info);
 
-        require_once Main::get_path_from_src('Admin/partials/listing-metabox.php');
+        require_once Main::get_path_from_src('Admin/partials/listing-meta-box/index.php');
     }
 
     public function save_meta( $post_id, $post )
