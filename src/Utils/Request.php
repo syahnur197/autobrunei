@@ -8,42 +8,36 @@ class Request
 
     public static function validate_post_request($is_ajax = false)
     {
-        $response = [
-            'success' => true,
-        ];
-        
         if ($_SERVER['REQUEST_METHOD'] !== 'POST') {
             $response = [
                 'success' => false,
                 'message' => 'Must be a POST request',
             ];
+
+            if ($is_ajax) {
+                wp_send_json($response);
+            }
+    
+            return $response;
         }
 
-        if ($is_ajax) {
-            wp_send_json($response);
-        }
-
-        return $response;
     }
 
     public static function validate_get_request($is_ajax = false)
     {
-        $response = [
-            'success' => true,
-        ];
-        
         if ($_SERVER['REQUEST_METHOD'] !== 'GET') {
             $response = [
                 'success' => false,
                 'message' => 'Must be a GET request',
             ];
+
+            if ($is_ajax) {
+                wp_send_json($response);
+            }
+            
+            return $response;
         }
 
-        if ($is_ajax) {
-            wp_send_json($response);
-        }
-        
-        return $response;
     }
     
     public static function validate_nonce($is_ajax = false)

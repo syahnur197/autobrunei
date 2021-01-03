@@ -2,8 +2,8 @@
 
 namespace Autobrunei\Models;
 
+use Autobrunei\Data\Helper as DataHelper;
 use Autobrunei\Main;
-use Autobrunei\Utils\Config;
 
 /**
  * Aku pakai interface just to make the models methods are consistent
@@ -63,12 +63,12 @@ class Listing implements ModelInterface
         global $pagenow;
 
         // arrays of values for dropdowns
-        $brands_arr            = Config::get_brands();
-        $transmissions_arr     = Config::get_transmissions();
-        $body_types_arr        = Config::get_body_types();
-        $conditions_arr        = Config::get_condititons();
-        $fuel_types_arr        = Config::get_fuel_types();
-        $drive_types_arr       = Config::get_drive_types();
+        $brands_arr            = DataHelper::get_brands();
+        $transmissions_arr     = DataHelper::get_transmissions();
+        $body_types_arr        = DataHelper::get_body_types();
+        $conditions_arr        = DataHelper::get_condititons();
+        $fuel_types_arr        = DataHelper::get_fuel_types();
+        $drive_types_arr       = DataHelper::get_drive_types();
 
         $is_new_page    = $pagenow === 'post-new.php';
 

@@ -15,6 +15,7 @@ namespace Autobrunei;
 use Autobrunei\Utils\Loader;
 use Autobrunei\Utils\Internationalization;
 use Autobrunei\Admin\Controller as AdminController;
+use Autobrunei\Controllers\Admin\ListingController;
 use Autobrunei\Front\Controller as FrontController;
 use Autobrunei\Models\Listing;
 
@@ -116,13 +117,19 @@ class Main {
 	private function define_admin_hooks() {
 
 		$plugin_admin  = new AdminController( $this->get_plugin_name(), $this->get_version() );
+
+		// initialise models objects
 		$listing_model = new Listing();
+
+		// initialise controllers objects
+		$listing_controller = new ListingController();
 
 		$this->loader->add_action( 'admin_enqueue_scripts', $plugin_admin, 'enqueue_styles' );
 		$this->loader->add_action( 'admin_enqueue_scripts', $plugin_admin, 'enqueue_scripts' );
 
 		// listing post type and metas
-		$this->loader->add_action('init', $listing_model, 'create_post_type');
+		$this->loader->add_action( 'init', $listing_model, 'create_post_type' );
+		$this->loader->add_action( 'wp_ajax_get_models_by_brand', $listing_controller, 'get_models_by_brand' );
 
 	}
 
