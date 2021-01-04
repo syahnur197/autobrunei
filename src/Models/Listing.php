@@ -69,6 +69,7 @@ class Listing implements ModelInterface
         $conditions_arr        = DataHelper::get_condititons();
         $fuel_types_arr        = DataHelper::get_fuel_types();
         $drive_types_arr       = DataHelper::get_drive_types();
+        $features_arr          = DataHelper::get_features();
 
         $is_new_page    = $pagenow === 'post-new.php';
 

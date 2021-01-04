@@ -53,7 +53,10 @@ class Helper
 
     public static function get_body_types(): array
     {
-        return BodyTypes::DATA;
+        $body_types = BodyTypes::DATA;
+        sort($body_types);
+
+        return $body_types;
     }
 
     public static function is_body_type_exist(string $body_type): bool
@@ -74,7 +77,10 @@ class Helper
 
     public static function get_fuel_types(): array
     {
-        return FuelTypes::DATA;
+        $fule_types = FuelTypes::DATA;
+        sort($fule_types);
+
+        return $fule_types;
     }
 
     public static function is_fuel_type_exist(string $fuel_type): bool
@@ -90,5 +96,18 @@ class Helper
     public static function is_drive_type_exist(string $drive_type): bool
     {
         return in_array($drive_type, DriveTypes::DATA);
+    }
+
+    public static function get_features(): array
+    {
+        $features = Features::DATA;
+        sort($features);
+
+        return $features;
+    }
+
+    public static function is_feature_exist(string $feature): bool
+    {
+        return in_array($feature, Features::DATA);
     }
 }

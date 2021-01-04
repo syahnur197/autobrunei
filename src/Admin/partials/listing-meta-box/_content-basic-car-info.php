@@ -68,7 +68,7 @@
     
     <div class="ab-meta-grid">
         <label for="engine_no"><strong>Engine No.</strong></label>
-        <input type="text" name="engine_no" id="mengine_noodel" value="" />
+        <input type="text" name="engine_no" id="engine_no" value="" />
     </div>
     
     <h2 class="ab-h2 no-left-padding">Car Condition</h2>
@@ -85,5 +85,9 @@
     <div class="ab-meta-grid">
         <label for="mileage"><strong>Mileage (in km)</strong></label>
         <input type="number" name="mileage" id="mileage" value="" />
+    </div>
+
+    <div>
+        <button class="ab-btn ab-btn-primary ab-navigate-btn" type="button" data-content="features">Next</button>
     </div>
 </div>

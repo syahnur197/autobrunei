@@ -49,24 +49,7 @@
             });
         }
 
-        fetch_brand_models("<?= Helper::get_brands()[0]; ?>");
-
-        // to add new listing
-        $(document).on('click', "#add-feature-button", function(e) {
-            const features_listing = $("#ab-features-list");
-            const new_feature_input = `<div class="ab-feature-row">
-                <input type="text" class="ab-form-control" name="feature[]" placeholder="Add new feature"/>
-                <button class="ab-btn ab-btn-danger ab-delete-feature-btn" type="button">Delete</button>
-            </div>`;
-
-            features_listing.append(new_feature_input);
-        });
-
-
-        // handling sidebar
-        $(document).on('click', '.ab-list-item', function(e) {
-            let content = $(this).data('content');
-
+        function navigate(content) {
             $(".ab-sub-content").removeClass('ab-d-block');
             $(".ab-sub-content").addClass('ab-d-hide');
 
@@ -74,12 +57,25 @@
             $(`#${content}`).removeClass('ab-d-hide');
 
             $(".ab-list-item").removeClass('active');
-            $(this).addClass('active');
+
+            $(".ab-list-item").find(`[data-content='${content}']`)
+            
+            $(`.ab-list-item[data-content='${content}']`).addClass('active');
+        }
+
+        fetch_brand_models("<?= Helper::get_brands()[0]; ?>");
+
+        // handling sidebar
+        $(document).on('click', '.ab-list-item', function(e) {
+            let content = $(this).data('content');
+
+            navigate(content);
         });
 
-        // delete feature row
-        $(document).on('click', ".ab-delete-feature-btn", function(e) {
-            $(this).parent().remove();
+        $(document).on('click', '.ab-navigate-btn', function(e) {
+            let content = $(this).data('content');
+
+            navigate(content);
         });
 
         // fetching models based on brand
@@ -88,5 +84,20 @@
 
             let models = fetch_brand_models(brand);
         });
+
+        // to add new listing
+        // $(document).on('click', "#add-feature-button", function(e) {
+        //     const features_listing = $("#ab-features-list");
+        //     const new_feature_input = `<div class="ab-feature-row">
+        //         <input type="text" class="ab-form-control" name="feature[]" placeholder="Add new feature"/>
+        //         <button class="ab-btn ab-btn-danger ab-delete-feature-btn" type="button">Delete</button>
+        //     </div>`;
+        //     features_listing.append(new_feature_input);
+        // });
+
+        // delete feature row
+        // $(document).on('click', ".ab-delete-feature-btn", function(e) {
+        //     $(this).parent().remove();
+        // });
     });
 </script>
