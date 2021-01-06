@@ -26,7 +26,7 @@ class Listing implements ModelInterface
         );
     
         $supports = array(
-            'title', 'editor',
+            'title',
         );
         
         $args = array(
@@ -48,10 +48,22 @@ class Listing implements ModelInterface
 
     public function add_meta_boxes()
     {
+        // to allow wp.media in the front end
+        wp_enqueue_media();
+
         add_meta_box(
             'ab-listings-id',
             'Listing',
             [$this, 'meta_box'],
+            'listings',
+            'normal',
+            'default'
+        );
+
+        add_meta_box(
+            'sellers-note-id',
+            'Seller\'s Note',
+            [$this, 'sellers_note_meta_box'],
             'listings',
             'normal',
             'default'
@@ -82,6 +94,23 @@ class Listing implements ModelInterface
         $additional_info    = esc_textarea($listing->additional_info);
 
         require_once Main::get_path_from_src('Admin/partials/listing-meta-box/index.php');
+    }
+    
+    public function sellers_note_meta_box($post)
+    {
+        global $pagenow;
+
+        $is_new_page    = $pagenow === 'post-new.php';
+
+        $listing        = get_post($post->ID);
+        $sellers_note   = esc_textarea($listing->sellers_note);
+
+        $editor_setting = [
+            'media_buttons' => false,
+            'drag_drop_upload' => false,
+        ]; 
+
+        wp_editor( $sellers_note, 'sellers-note-wp-editor-id', $editor_setting );
     }
 
     public function save_meta( $post_id, $post )

@@ -87,6 +87,23 @@
         <input type="number" name="mileage" id="mileage" value="" />
     </div>
 
+    <h2 class="ab-h2 no-left-padding">Price</h2>
+    
+    <div class="ab-meta-grid">
+        <label for="price"><strong>Price (B$)</strong></label>
+        <input type="number" name="price" id="price" value="" required/>
+    </div>
+    
+    <div class="ab-meta-grid">
+        <label for="sale_price"><strong>Sale Price (B$)</strong></label>
+        <input type="number" name="sale_price" id="sale_price" value="" />
+    </div>
+
+    <label class="ab-checkbox-container">Mark as Sold
+        <input type="checkbox" class="" name="sold" value="sold"/>
+        <span class="ab-checkmark"></span>
+    </label>
+
     <div>
         <button class="ab-btn ab-btn-primary ab-navigate-btn" type="button" data-content="features">Next</button>
     </div>

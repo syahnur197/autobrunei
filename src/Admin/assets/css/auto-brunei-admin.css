@@ -4,188 +4,210 @@
  */
 
 #ab-listings-id .inside {
-    padding-left: 0 !important;
-    padding-bottom: 0 !important;
-    margin-top: 0 !important;
+  padding-left: 0 !important;
+  padding-bottom: 0 !important;
+  margin-top: 0 !important;
 }
 
 .ab-list-item {
-    background-color: #e5e5e5;
-    padding: 0.7em 0.3em;
-    font-weight: bold;
-    cursor: pointer;
-    color: black;
-    border-bottom: 1px solid #eee;
+  background-color: #e5e5e5;
+  padding: 0.7em 0.3em;
+  font-weight: bold;
+  cursor: pointer;
+  color: black;
+  border-bottom: 1px solid #eee;
 }
 
 .ab-list-item:hover {
-    background-color: #ffffff;
-    color: #0073AA;
+  background-color: #ffffff;
+  color: #0073aa;
 }
 
 .ab-list-item.active {
-    background-color: #0073aa !important;
-    color: #fff !important;
+  background-color: #0073aa !important;
+  color: #fff !important;
 }
 
 .ab-content {
-    padding: 1em;
+  padding: 1em;
 }
 
 .ab-form-layout {
-    display: grid;
-    grid-template-columns: 15% 85%;
-    margin: 0 !important;
-    min-height: 600px;
+  display: grid;
+  grid-template-columns: 15% 85%;
+  margin: 0 !important;
+  min-height: 600px;
 }
 
 .ab-meta-grid {
-    display: grid;
-    grid-template-columns: 20% 80%;
-    margin-bottom: 10px;
+  display: grid;
+  grid-template-columns: 20% 80%;
+  margin-bottom: 10px;
 }
 
 .ab-sidebar {
-    background-color: #FAFAFA !important;
+  background-color: #fafafa !important;
 }
 
 .ab-h2 {
-    font-weight: bold !important;
-    font-size: 1.5em !important;
+  font-weight: bold !important;
+  font-size: 1.5em !important;
 }
 
 .no-left-padding {
-    padding-left: 0px !important;
+  padding-left: 0px !important;
 }
 
 .ab-btn {
-    text-decoration: none;
-    text-shadow: none;
-    font-size: 13px;
-    cursor: pointer;
-    border-width: 1px;
-    border-style: solid;
-    box-sizing: border-box;
-    padding: 0 21px !important;
-    height: 40px !important;
-    line-height: 40px !important;
-    border-radius: 3px;
+  text-decoration: none;
+  text-shadow: none;
+  font-size: 13px;
+  cursor: pointer;
+  border-width: 1px;
+  border-style: solid;
+  box-sizing: border-box;
+  padding: 0 21px !important;
+  height: 40px !important;
+  line-height: 40px !important;
+  border-radius: 3px;
 }
 
 .ab-btn.ab-btn-primary {
-    background: #007cba;
-    border-color: #007cba;
-    color: #fff;
+  background: #007cba;
+  border-color: #007cba;
+  color: #fff;
 }
 
 .ab-btn.ab-btn-primary:hover {
-    background: #0071A1;
-    border-color: #0071A1;
-    color: #fff;
+  background: #0071a1;
+  border-color: #0071a1;
+  color: #fff;
 }
 
 .ab-btn.ab-btn-danger {
-    background: #ce1f1f;
-    border-color: #cf1d3a;
-    color: #fff;
+  background: #ce1f1f;
+  border-color: #cf1d3a;
+  color: #fff;
 }
 
 .ab-btn.ab-btn-danger:hover {
-    background: #ba0000;
-    border-color: #ba001f;
-    color: #fff;
+  background: #ba0000;
+  border-color: #ba001f;
+  color: #fff;
 }
 
 .ab-d-block {
-    display: block;
+  display: block;
 }
 
 .ab-d-hide {
-    display: none;
+  display: none;
 }
 
 .ab-form-control {
-    height: 40px;
-    line-height: 40px;
-    padding: 5px 20px;
-    border-radius: 4px !important;
-    font-size: 14px;
-    width: 100%;
+  height: 40px;
+  line-height: 40px;
+  padding: 5px 20px;
+  border-radius: 4px !important;
+  font-size: 14px;
+  width: 100%;
 }
 
 .ab-feature-row {
-    /* display: grid;
+  /* display: grid;
     grid-template-columns: 10% 90%;
     column-gap: 1em; */
-    margin-top: 0.5em;
-    margin-bottom: 0.5em;
+  margin-top: 0.5em;
+  margin-bottom: 0.5em;
 }
 
 /* Checkbox */
 /* Customize the label (the container) */
 .ab-checkbox-container {
-    display: block;
-    position: relative;
-    padding-left: 35px;
-    margin-bottom: 12px;
-    cursor: pointer;
-    font-size: 15px;
-    -webkit-user-select: none;
-    -moz-user-select: none;
-    -ms-user-select: none;
-    user-select: none;
-  }
-  
-  /* Hide the browser's default checkbox */
-  .ab-checkbox-container input {
-    position: absolute;
-    opacity: 0;
-    cursor: pointer;
-    height: 0;
-    width: 0;
-  }
-  
-  /* Create a custom checkbox */
-  .ab-checkmark {
-    position: absolute;
-    top: 0;
-    left: 0;
-    height: 25px;
-    width: 25px;
-    background-color: #eee;
-  }
-  
-  /* On mouse-over, add a grey background color */
-  .ab-checkbox-container:hover input ~ .ab-checkmark {
-    background-color: #ccc;
-  }
-  
-  /* When the checkbox is checked, add a blue background */
-  .ab-checkbox-container input:checked ~ .ab-checkmark {
-    background-color: #2196F3;
-  }
-  
-  /* Create the checkmark/indicator (hidden when not checked) */
-  .ab-checkmark:after {
-    content: "";
-    position: absolute;
-    display: none;
-  }
-  
-  /* Show the checkmark when checked */
-  .ab-checkbox-container input:checked ~ .ab-checkmark:after {
-    display: block;
-  }
-  
-  /* Style the checkmark/indicator */
-  .ab-checkbox-container .ab-checkmark:after {
-    left: 9px;
-    top: 5px;
-    width: 5px;
-    height: 10px;
-    border: solid white;
-    border-width: 0 3px 3px 0;
-    -webkit-transform: rotate(45deg);
-    -ms-transform: rotate(45deg);
-    transform: rotate(45deg);
-  }
+  display: block;
+  position: relative;
+  padding-left: 35px;
+  margin-bottom: 12px;
+  cursor: pointer;
+  font-size: 15px;
+  -webkit-user-select: none;
+  -moz-user-select: none;
+  -ms-user-select: none;
+  user-select: none;
+}
+
+/* Hide the browser's default checkbox */
+.ab-checkbox-container input {
+  position: absolute;
+  opacity: 0;
+  cursor: pointer;
+  height: 0;
+  width: 0;
+}
+
+/* Create a custom checkbox */
+.ab-checkmark {
+  position: absolute;
+  top: 0;
+  left: 0;
+  height: 25px;
+  width: 25px;
+  background-color: #eee;
+}
+
+/* On mouse-over, add a grey background color */
+.ab-checkbox-container:hover input ~ .ab-checkmark {
+  background-color: #ccc;
+}
+
+/* When the checkbox is checked, add a blue background */
+.ab-checkbox-container input:checked ~ .ab-checkmark {
+  background-color: #2196f3;
+}
+
+/* Create the checkmark/indicator (hidden when not checked) */
+.ab-checkmark:after {
+  content: "";
+  position: absolute;
+  display: none;
+}
+
+/* Show the checkmark when checked */
+.ab-checkbox-container input:checked ~ .ab-checkmark:after {
+  display: block;
+}
+
+/* Style the checkmark/indicator */
+.ab-checkbox-container .ab-checkmark:after {
+  left: 9px;
+  top: 5px;
+  width: 5px;
+  height: 10px;
+  border: solid white;
+  border-width: 0 3px 3px 0;
+  -webkit-transform: rotate(45deg);
+  -ms-transform: rotate(45deg);
+  transform: rotate(45deg);
+}
+
+#ab-featured-img {
+  min-width: 100%;
+  max-height: 500px;
+  object-fit: cover;
+}
+
+.non-featured-img {
+  width: 120px;
+  height: 120px;
+  object-fit: cover;
+  margin: 4px 4px;
+  cursor: pointer;
+  border: 2px solid #0073aa;
+  border-radius: 2px;
+}
+
+.non-featured-img:hover {
+  outline: none;
+  border: 2px solid #9ecaed;
+  box-shadow: 0 0 30px #9ecaed;
+}
