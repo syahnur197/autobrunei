@@ -5,7 +5,11 @@
         <?php foreach($features_arr as $feature): ?>
         <div class="ab-feature-row">
             <label class="ab-checkbox-container"><?= $feature; ?>
-                <input type="checkbox" class="" name="feature[]" value="<?= $feature?>"/>
+                <input type="checkbox" class="" name="features[]" value="<?= $feature?>"
+                    <?php if(in_array($feature, $listing_features)): ?>
+                        checked
+                    <?php endif;?>
+                />
                 <span class="ab-checkmark"></span>
             </label>
         </div>

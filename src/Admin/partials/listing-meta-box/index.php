@@ -10,6 +10,7 @@
         <?php require_once "_content-features.php"; ?>
         <?php require_once "_content-images.php"; ?>
         <input type="hidden" name="nonce" value="<?= Request::get_nonce(); ?>"/>
+        <input type="hidden" name="save_post" value="1"/>
     </div>
 </div>
 

@@ -2,20 +2,17 @@
 
 namespace Autobrunei\Models;
 
-use Autobrunei\Data\Helper as DataHelper;
-use Autobrunei\Main;
-use Autobrunei\Utils\AdminNotice;
-use Autobrunei\Utils\Request;
 use Exception;
-use InvalidArgumentException;
+use Autobrunei\Main;
+use Autobrunei\Utils\Request;
+use Autobrunei\Utils\AdminNotice;
+use Autobrunei\Data\Helper as DataHelper;
 
 /**
  * Aku pakai interface just to make the models methods are consistent
  */
 class Listing implements ModelInterface
 {
-
-    private $error_message = '';
 
     public function create_post_type()
     {
@@ -90,11 +87,16 @@ class Listing implements ModelInterface
         $drive_types_arr       = DataHelper::get_drive_types();
         $features_arr          = DataHelper::get_features();
 
-        $is_new_page    = $pagenow === 'post-new.php';
+        $is_new_page           = $pagenow === 'post-new.php';
 
-        $listing     = get_post($post->ID);
-        $models_arr  = isset($listing->brand) ? DataHelper::get_brand_models($listing->brand) 
-            : DataHelper::get_brand_models(DataHelper::get_brands()[0]);
+        $listing               = get_post($post->ID);
+
+        // preload the models of a brand
+        $selected_brand        = $listing->brand ?? DataHelper::get_brands()[0];
+        $models_arr            = DataHelper::get_brand_models($selected_brand);
+
+        // this is for to check the listing's features
+        $listing_features      = json_decode($listing->features) ?? [];
 
         require_once Main::get_path_from_src('Admin/partials/listing-meta-box/index.php');
     }
@@ -118,121 +120,128 @@ class Listing implements ModelInterface
 
     public function save_meta( $post_id, $post )
     {
+        // copy pasted codes, don't ask me
+        if ( defined( 'DOING_AUTOSAVE' ) && DOING_AUTOSAVE ) return;
 
-        if ( defined( 'DOING_AUTOSAVE' ) && DOING_AUTOSAVE ) {
-            return;
-        }
+        // I have to add this because save_meta method always run
+        // even though I just click "add listing" button
+        // this code checks if save_post is posted, 
+        // if not then stop this code execution
+        if ( ! isset($_POST['save_post']) ) return;
 
-        $validate_post = Request::validate_post_request( false );
+        if ( ! current_user_can( 'edit_post', $post_id ) ) return $post_id;
 
-        if ( ! $validate_post['success'] ) {
-            throw new Exception('Not a post request!');
-        }
 
-        $validate_nonce = Request::validate_nonce( false );
+        try {
 
-        if ( ! $validate_nonce['success'] ) {
-            throw new Exception('Invalid nonce!');
-        }
+            $this->_validate_save_post();
 
-        if ( ! current_user_can( 'edit_post', $post_id ) ) {
-            return $post_id;
-        }
+            // handle listing validations
+            $listing_data = $this->_get_posted_listing_data();
 
-        // handle listing validations
-        $listing_data = $this->_get_posted_listing_data();
+            $this->_save_listing_metas($listing_data, $post_id);
 
-        foreach($listing_data as $key => $data) {
-            update_post_meta($post_id, $key, $data);
-        }
+        } catch (Exception $e) {
+
+            AdminNotice::displayError($e->getMessage());
+
+            wp_redirect( wp_get_referer() );
+
+            exit;
+        } 
     }
 
     private function _get_posted_listing_data(): array
     {
         // getting the value from form
-        $brand = esc_textarea( $_POST['brand'] );
-        $model = esc_textarea( $_POST['model'] );
-        $body_type = esc_textarea( $_POST['body_type'] );
-        $colour = esc_textarea( $_POST['colour'] );
-        $fuel_type = esc_textarea( $_POST['fuel_type'] );
-        $transmission = esc_textarea( $_POST['transmission'] );
-        $drive_type = esc_textarea( $_POST['drive_type'] );
-        $year = esc_textarea( $_POST['year'] );
-        $engine_no = esc_textarea( $_POST['engine_no'] );
-        $condition = esc_textarea( $_POST['condition'] );
-        $mileage = esc_textarea( $_POST['mileage'] );
-        $price = esc_textarea( $_POST['price'] );
-        $sale_price = esc_textarea( $_POST['sale_price'] );
-        // $sold = esc_textarea( $_POST['sold'] );
-        // $features = $_POST['feature[]']; // this is an array
-        $sellers_note = esc_textarea( $_POST['sellers_note'] );
+        $data['brand']          = $_POST['brand'];
+        $data['model']          = $_POST['model'];
+        $data['body_type']      = $_POST['body_type'];
+        $data['colour']         = $_POST['colour'];
+        $data['fuel_type']      = $_POST['fuel_type'];
+        $data['transmission']   = $_POST['transmission'];
+        $data['drive_type']     = $_POST['drive_type'];
+        $data['year']           = $_POST['year'];
+        $data['engine_no']      = $_POST['engine_no'];
+        $data['condition']      = $_POST['condition'];
+        $data['mileage']        = $_POST['mileage'];
+        $data['price']          = $_POST['price'];
+        $data['sale_price']     = $_POST['sale_price'];
+        $data['sold']           = $_POST['sold'] ?? '';
+        $data['features']       = $_POST['features']; // this is an array
+        $data['sellers_note']   = $_POST['sellers_note'];
 
         // validate data
 
-        try {
-            DataHelper::is_brand_exist($brand);
-            DataHelper::is_brand_model_exist($brand, $model);
-            DataHelper::is_body_type_exist($body_type);
-            DataHelper::is_fuel_type_exist($fuel_type);
-            DataHelper::is_transmission_exist($transmission);
-            DataHelper::is_drive_type_exist($drive_type);
-            DataHelper::is_condition_exist($condition);
+        DataHelper::is_brand_exist($data['brand']);
+        DataHelper::is_brand_model_exist($data['brand'], $data['model']);
+        DataHelper::is_body_type_exist($data['body_type']);
+        DataHelper::is_fuel_type_exist($data['fuel_type']);
+        DataHelper::is_transmission_exist($data['transmission']);
+        DataHelper::is_drive_type_exist($data['drive_type']);
+        DataHelper::is_condition_exist($data['condition']);
 
-            // sanitize the feature in features
-            // foreach($features as $key => $feature) {
-            //     DataHelper::is_feature_exist($feature);
-            //     $features[$key] = esc_textarea($feature);
-            // }
-
-        } catch (InvalidArgumentException $e) {
-            $this->error_message = $e->getMessage();
-            
-            AdminNotice::displayError(__($this->error_message));
-
-            $previous_page_url = wp_get_referer() ;
-
-            wp_redirect( $previous_page_url );
-
-            exit;
-        } 
-
-        return compact(
-            'brand',
-            'model',
-            'body_type',
-            'colour',
-            'fuel_type',
-            'transmission',
-            'drive_type',
-            'year',
-            'engine_no',
-            'condition',
-            'mileage',
-            'price',
-            'sale_price',
-            'sold',
-            'features',
-            'sellers_note',
-        );
+        // sanitize the feature in features
+        foreach($data['features'] as $key => $feature) {
+            DataHelper::is_feature_exist($feature);
+            $features[$key] = sanitize_text_field($feature);
+        }
+        
+        return $data;
     }
 
-    // I fucking hate this approach bro
-    public function save_post_error()
+    private function _save_listing_metas(iterable $listing_data, int $post_id)
     {
-        ?>
-            <div class="notice notice-error is-dismissible">
-                <p><?= $this->error_message; ?></p>
-            </div>
-        <?php
+        foreach($listing_data as $key => $data) {
+
+            if ($key === 'features') {
+                update_post_meta($post_id, $key, json_encode($data));
+            } else {
+                // sanitize before storing
+                $data = sanitize_text_field($data);
+
+                update_post_meta($post_id, $key, $data);
+            }
+
+        }
+    }
+
+    private function _validate_save_post()
+    {
+        if ( !Request::validate_post_request()['success'] ) throw new Exception('Not a post request!');
+
+        if ( !Request::validate_nonce()['success'] ) throw new Exception('Invalid nonce!');
     }
 
     public function set_custom_columns($columns)
     {
+		$columns['brand']       = __('Brand');
+		$columns['model']       = __('Model');
+		$columns['body_type']   = __('Body Type');
+		$columns['colour']      = __('Colour');
+        $columns['year']        = __('Year');
         
+        return $columns;
     }
 
     public function custom_column( $column, $post_id )
     {
+        $listing = get_post($post_id);
 
+        switch ($column) {
+            case 'brand':
+                echo $listing->brand;
+                break;
+            case 'model':
+                echo $listing->model;
+                break;
+            case 'body_type':
+                echo $listing->body_type;
+            case 'colour':
+                echo $listing->colour;
+                break;
+            case 'year':
+                echo $listing->year;
+    }
     }
 }
