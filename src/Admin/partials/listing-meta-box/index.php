@@ -9,6 +9,7 @@
         <?php require_once "_content-basic-car-info.php"; ?>
         <?php require_once "_content-features.php"; ?>
         <?php require_once "_content-images.php"; ?>
+        <input type="hidden" name="nonce" value="<?= Request::get_nonce(); ?>"/>
     </div>
 </div>
 
@@ -63,7 +64,9 @@
             $(`.ab-list-item[data-content='${content}']`).addClass('active');
         }
 
-        fetch_brand_models("<?= Helper::get_brands()[0]; ?>");
+        const selected_brand = $('#brand').val();
+
+        // fetch_brand_models(selected_brand);
 
         // handling sidebar
         $(document).on('click', '.ab-list-item', function(e) {

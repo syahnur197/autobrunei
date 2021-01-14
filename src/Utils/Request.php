@@ -8,6 +8,8 @@ class Request
 
     public static function validate_post_request($is_ajax = false)
     {
+        $response['success'] = true;
+
         if ($_SERVER['REQUEST_METHOD'] !== 'POST') {
             $response = [
                 'success' => false,
@@ -16,15 +18,20 @@ class Request
 
             if ($is_ajax) {
                 wp_send_json($response);
+                wp_die();
             }
     
             return $response;
         }
 
+        return $response;
+
     }
 
     public static function validate_get_request($is_ajax = false)
     {
+        $response['success'] = true;
+
         if ($_SERVER['REQUEST_METHOD'] !== 'GET') {
             $response = [
                 'success' => false,
@@ -33,10 +40,13 @@ class Request
 
             if ($is_ajax) {
                 wp_send_json($response);
+                wp_die();
             }
             
             return $response;
         }
+
+        return $response;
 
     }
     
@@ -57,6 +67,7 @@ class Request
 
         if ($is_ajax) {
             wp_send_json($response);
+            wp_die();
         }
         
         return $response;

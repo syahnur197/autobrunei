@@ -4,6 +4,8 @@ namespace Autobrunei\Data;
 
 use Autobrunei\Data\Brands;
 use Autobrunei\Data\Models;
+use Exception;
+use InvalidArgumentException;
 
 /**
  * This is where you can add some values to 
@@ -22,7 +24,11 @@ class Helper
 
     public static function is_brand_exist(string $brand): bool
     {
-        return in_array($brand, Brands::DATA);
+        if ( ! in_array($brand, Brands::DATA) ) {
+            throw new InvalidArgumentException('Brand "'. $brand .'" does not exist!');
+        }
+
+        return true;
     }
 
 
@@ -36,7 +42,11 @@ class Helper
 
     public static function is_brand_model_exist(string $brand, string $model): bool
     {
-        return in_array($model, Models::DATA[$brand]);
+        if (!in_array($model, Models::DATA[$brand])) {
+            throw new InvalidArgumentException('Model "'. $model .'" does not exist!');
+        }
+
+        return true;
     }
 
 
@@ -47,7 +57,11 @@ class Helper
 
     public static function is_transmission_exist(string $transmission): bool
     {
-        return in_array($transmission, Transmissions::DATA);
+        if (!in_array($transmission, Transmissions::DATA)) {
+            throw new InvalidArgumentException('Transmission "'. $transmission .'" does not exist!');
+        }
+
+        return true;
     }
 
 
@@ -61,7 +75,11 @@ class Helper
 
     public static function is_body_type_exist(string $body_type): bool
     {
-        return in_array($body_type, BodyTypes::DATA);
+        if (!in_array($body_type, BodyTypes::DATA)) {
+            throw new InvalidArgumentException('Body type "'. $body_type .'" does not exist!');
+        }
+
+        return true;
     }
 
 
@@ -72,7 +90,11 @@ class Helper
 
     public static function is_condition_exist(string $condition): bool
     {
-        return in_array($condition, Conditions::DATA);
+        if (!in_array($condition, Conditions::DATA)) {
+            throw new InvalidArgumentException('Condition "'. $condition .'" does not exist!');
+        }
+
+        return true;
     }
 
     public static function get_fuel_types(): array
@@ -85,7 +107,11 @@ class Helper
 
     public static function is_fuel_type_exist(string $fuel_type): bool
     {
-        return in_array($fuel_type, FuelTypes::DATA);
+        if (!in_array($fuel_type, FuelTypes::DATA)) {
+            throw new InvalidArgumentException('Fuel type "'. $fuel_type .'" does not exist!');
+        }
+
+        return true;
     }
 
     public static function get_drive_types(): array
@@ -95,7 +121,11 @@ class Helper
 
     public static function is_drive_type_exist(string $drive_type): bool
     {
-        return in_array($drive_type, DriveTypes::DATA);
+        if (!in_array($drive_type, DriveTypes::DATA)) {
+            throw new InvalidArgumentException('Drive type "'. $drive_type .'" does not exist!');
+        }
+
+        return true;
     }
 
     public static function get_features(): array
@@ -108,6 +138,10 @@ class Helper
 
     public static function is_feature_exist(string $feature): bool
     {
-        return in_array($feature, Features::DATA);
+        if (!in_array($feature, Features::DATA)) {
+            throw new InvalidArgumentException('Feature "'. $feature .'" does not exist!');
+        }
+
+        return true;
     }
 }

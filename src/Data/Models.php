@@ -44,6 +44,7 @@ class Models
             '1 Series'
         ],
         'Tesla' => [
+            'Hello',
             'Z4',
             '3 Series',
             '1 Series'

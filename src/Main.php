@@ -18,6 +18,7 @@ use Autobrunei\Admin\Controller as AdminController;
 use Autobrunei\Controllers\Admin\ListingController;
 use Autobrunei\Front\Controller as FrontController;
 use Autobrunei\Models\Listing;
+use Autobrunei\Utils\AdminNotice;
 
 /**
  * The core plugin class.
@@ -129,7 +130,13 @@ class Main {
 
 		// listing post type and metas
 		$this->loader->add_action( 'init', $listing_model, 'create_post_type' );
+		$this->loader->add_action( 'save_post_listings', $listing_model, 'save_meta', 1, 2 );
+		
 		$this->loader->add_action( 'wp_ajax_get_models_by_brand', $listing_controller, 'get_models_by_brand' );
+
+		
+		$this->loader->add_action('admin_notices', new AdminNotice(), 'displayAdminNotice');
+		
 
 	}
 
