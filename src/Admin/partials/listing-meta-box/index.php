@@ -10,6 +10,8 @@
         <?php require_once "_content-features.php"; ?>
         <?php require_once "_content-images.php"; ?>
         <input type="hidden" name="nonce" value="<?= Request::get_nonce(); ?>"/>
+        <input type="hidden" name="featured_image_url" id="featured_image_url"/>
+        <input type="hidden" name="images_urls" id="images_urls"/> 
         <input type="hidden" name="save_post" value="1"/>
     </div>
 </div>
@@ -100,6 +102,9 @@
 
             if (clicked_img_src !== featured_img_src) {
                 featured_img.attr('src', clicked_img_src);
+
+                // update the featured image url hidden input
+                $("#featured_image_url").val(clicked_img_src);
             }
         });
 
@@ -127,18 +132,27 @@
                 let featured_img = file_frame.state().get('selection').first().toJSON();
 
                 $('#ab-featured-img').attr('src', featured_img.url);
+
+                // update the featured image url hidden input
+                $("#featured_image_url").val(featured_img.url);
                 
                 let selections = file_frame.state().get('selection');
 
                 let img_container_string = "";
                 let img_container = $(".ab-img-container");
                 img_container.empty();
+
+                let images_urls_array = [];
+
                 selections.map( function( attachment ) {
                     attachment = attachment.toJSON();
-
-                    
                     img_container_string += `<img src="${attachment.url}" class="non-featured-img" alt=""/>`;
+
+                    images_urls_array.push(attachment.url);
                 });
+
+                // update the images urls hidden input
+                $("#images_urls").val(JSON.stringify(images_urls_array));
 
                 img_container_string += `<p>Click one of the images above to change the featured image</p>`;
 

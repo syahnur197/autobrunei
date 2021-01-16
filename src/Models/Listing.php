@@ -154,22 +154,24 @@ class Listing implements ModelInterface
     private function _get_posted_listing_data(): array
     {
         // getting the value from form
-        $data['brand']          = $_POST['brand'];
-        $data['model']          = $_POST['model'];
-        $data['body_type']      = $_POST['body_type'];
-        $data['colour']         = $_POST['colour'];
-        $data['fuel_type']      = $_POST['fuel_type'];
-        $data['transmission']   = $_POST['transmission'];
-        $data['drive_type']     = $_POST['drive_type'];
-        $data['year']           = $_POST['year'];
-        $data['engine_no']      = $_POST['engine_no'];
-        $data['condition']      = $_POST['condition'];
-        $data['mileage']        = $_POST['mileage'];
-        $data['price']          = $_POST['price'];
-        $data['sale_price']     = $_POST['sale_price'];
-        $data['sold']           = $_POST['sold'] ?? '';
-        $data['features']       = $_POST['features']; // this is an array
-        $data['sellers_note']   = $_POST['sellers_note'];
+        $data['brand']              = $_POST['brand'];
+        $data['model']              = $_POST['model'];
+        $data['body_type']          = $_POST['body_type'];
+        $data['colour']             = $_POST['colour'];
+        $data['fuel_type']          = $_POST['fuel_type'];
+        $data['transmission']       = $_POST['transmission'];
+        $data['drive_type']         = $_POST['drive_type'];
+        $data['year']               = $_POST['year'];
+        $data['engine_no']          = $_POST['engine_no'];
+        $data['condition']          = $_POST['condition'];
+        $data['mileage']            = $_POST['mileage'];
+        $data['price']              = $_POST['price'];
+        $data['sale_price']         = $_POST['sale_price'];
+        $data['sold']               = $_POST['sold'] ?? '';
+        $data['features']           = $_POST['features']; // this is an array
+        $data['sellers_note']       = $_POST['sellers_note'];
+        $data['featured_image_url'] = $_POST['featured_image_url'];
+        $data['images_urls']        = $_POST['images_urls'];
 
         // validate data
 
@@ -196,6 +198,32 @@ class Listing implements ModelInterface
 
             if ($key === 'features') {
                 update_post_meta($post_id, $key, json_encode($data));
+            } else if ($key === 'featured_image_url') {
+                $data = sanitize_text_field($data);
+                $attachment_id = attachment_url_to_postid($data);
+                update_post_meta($post_id, 'featured_image_id', $attachment_id);
+                update_post_meta($post_id, $key, $data);
+            } else if ($key === 'images_urls') {
+
+                // remove the backslashes
+                $data = stripslashes($data);
+                $data = sanitize_text_field($data);
+
+                // get the images urls as array
+                $images_urls = json_decode($data);
+                $images_ids = [];
+
+                // get the attachments ids
+                foreach($images_urls as $url) {
+                    $image_id = attachment_url_to_postid($url);
+
+                    $images_ids[] = $image_id;
+                }
+
+                update_post_meta($post_id, 'images_ids', json_encode($images_ids));
+                
+                update_post_meta($post_id, $key, $data);
+
             } else {
                 // sanitize before storing
                 $data = sanitize_text_field($data);
