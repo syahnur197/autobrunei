@@ -16,6 +16,7 @@ use Autobrunei\Utils\Loader;
 use Autobrunei\Utils\Internationalization;
 use Autobrunei\Admin\Controller as AdminController;
 use Autobrunei\Controllers\Admin\ListingController;
+use Autobrunei\Controllers\Front\ListingPageController;
 use Autobrunei\Front\Controller as FrontController;
 use Autobrunei\Models\Listing;
 use Autobrunei\Utils\AdminNotice;
@@ -153,9 +154,16 @@ class Main {
 	private function define_public_hooks() {
 
 		$plugin_public = new FrontController( $this->get_plugin_name(), $this->get_version() );
+		$listing_page = new ListingPageController();
 
 		$this->loader->add_action( 'wp_enqueue_scripts', $plugin_public, 'enqueue_styles' );
 		$this->loader->add_action( 'wp_enqueue_scripts', $plugin_public, 'enqueue_scripts' );
+
+		// add booking view shortcode
+		$this->loader->add_shortcode( 'all_listings_view', $listing_page, 'all_listings_view' );
+		if (!is_admin()) {
+    
+        }
 
 	}
 

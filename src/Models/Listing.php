@@ -17,8 +17,8 @@ class Listing implements ModelInterface
     public function create_post_type()
     {
         $labels = array(
-            'name'               => __( 'Listings' ),
-            'singular_name'      => __( 'Listing' ),
+            'name'               => __( 'Auto Brunei Listings' ),
+            'singular_name'      => __( 'Auto Brunei Listing' ),
             'add_new'            => __( 'Add New Listing' ),
             'add_new_item'       => __( 'Add New Listing' ),
             'edit_item'          => __( 'Edit Listing' ),
@@ -37,7 +37,7 @@ class Listing implements ModelInterface
             'labels'            => $labels,
             'public'            => true,
             'has_archive'       => true,
-            'rewrite'           => array('slug' => 'listings'),
+            'rewrite'           => array('slug' => 'ab-listings'),
             'show_in_rest'      => true,
             'supports'          => $supports,
             'capability_type'   => 'post',
@@ -47,7 +47,7 @@ class Listing implements ModelInterface
             'register_meta_box_cb' => array( $this, 'add_meta_boxes' ),
         );
     
-        register_post_type( 'listings', $args);
+        register_post_type( 'ab-listings', $args);
     }
 
     public function add_meta_boxes()
@@ -59,7 +59,7 @@ class Listing implements ModelInterface
             'ab-listings-id',
             'Listing',
             [$this, 'meta_box'],
-            'listings',
+            'ab-listings',
             'normal',
             'default'
         );
@@ -68,7 +68,7 @@ class Listing implements ModelInterface
             'sellers-note-id',
             'Seller\'s Note',
             [$this, 'sellers_note_meta_box'],
-            'listings',
+            'ab-listings',
             'normal',
             'default'
         );
