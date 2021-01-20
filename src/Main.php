@@ -131,9 +131,9 @@ class Main {
 
 		// listing post type and metas
 		$this->loader->add_action( 'init', $listing_model, 'create_post_type' );
-		$this->loader->add_action( 'save_post_listings', $listing_model, 'save_meta', 10, 3 );
-        $this->loader->add_action( 'manage_listings_posts_columns', $listing_model, 'set_custom_columns' );
-        $this->loader->add_action( 'manage_listings_posts_custom_column', $listing_model, 'custom_column', 10, 2 );
+		$this->loader->add_action( 'save_post_ab-listings', $listing_model, 'save_meta', 10, 3 );
+        $this->loader->add_action( 'manage_ab-listings_posts_columns', $listing_model, 'set_custom_columns' );
+        $this->loader->add_action( 'manage_ab-listings_posts_custom_column', $listing_model, 'custom_column', 10, 2 );
 		
 		$this->loader->add_action( 'wp_ajax_get_models_by_brand', $listing_controller, 'get_models_by_brand' );
 
@@ -159,10 +159,9 @@ class Main {
 		$this->loader->add_action( 'wp_enqueue_scripts', $plugin_public, 'enqueue_styles' );
 		$this->loader->add_action( 'wp_enqueue_scripts', $plugin_public, 'enqueue_scripts' );
 
-		// add booking view shortcode
-		$this->loader->add_shortcode( 'all_listings_view', $listing_page, 'all_listings_view' );
 		if (!is_admin()) {
-    
+			// add booking view shortcode
+			$this->loader->add_shortcode( 'all_listings_view', $listing_page, 'all_listings_view' );
         }
 
 	}

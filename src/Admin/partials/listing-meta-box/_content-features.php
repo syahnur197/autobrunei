@@ -18,6 +18,6 @@
 
     <div>
         <button class="ab-btn ab-btn-primary ab-navigate-btn" type="button" data-content="details">Previous</button>
-        <button class="ab-btn ab-btn-primary ab-navigate-btn" type="button" data-content="price">Next</button>
+        <button class="ab-btn ab-btn-primary ab-navigate-btn" type="button" data-content="images">Next</button>
     </div>
 </div>
