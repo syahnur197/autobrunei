@@ -6,6 +6,7 @@ use Autobrunei\Data\Helper;
 use Autobrunei\Entities\Listing;
 use Autobrunei\Main;
 use Autobrunei\Utils\Request;
+use Autobrunei\Utils\Response;
 use Autobrunei\Utils\Session;
 use Exception;
 
@@ -14,6 +15,10 @@ class ListingFormPageController
     // [listing_form_view]
     public function listing_form_view()
     {
+        if (!is_user_logged_in()) {
+            Response::not_found();
+        }
+
         // arrays of values for dropdowns
         $brands_arr            = Helper::get_brands();
         $transmissions_arr     = Helper::get_transmissions();

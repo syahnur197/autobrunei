@@ -24,4 +24,13 @@ class Response
         wp_send_json($response, $status_code);
     }
 
+    public static function not_found()
+    {
+        global $wp_query;
+        $wp_query->set_404();
+        status_header( 404 );
+        get_template_part( 404 );
+        exit();
+    }
+
 }
