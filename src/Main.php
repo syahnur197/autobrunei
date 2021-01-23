@@ -19,8 +19,9 @@ use Autobrunei\Controllers\Admin\ListingController;
 use Autobrunei\Controllers\Front\ListingFormPageController;
 use Autobrunei\Controllers\Front\ListingPageController;
 use Autobrunei\Front\Controller as FrontController;
-use Autobrunei\Cpt\Listing;
+use Autobrunei\Cpt\ListingCpt;
 use Autobrunei\Utils\AdminNotice;
+use Autobrunei\Utils\Session;
 
 /**
  * The core plugin class.
@@ -122,7 +123,7 @@ class Main {
 		$plugin_admin  = new AdminController( $this->get_plugin_name(), $this->get_version() );
 
 		// initialise models objects
-		$listing_model = new Listing();
+		$listing_model = new ListingCpt();
 
 		// initialise controllers objects
 		$listing_controller = new ListingController();
@@ -157,6 +158,9 @@ class Main {
 		$plugin_public = new FrontController( $this->get_plugin_name(), $this->get_version() );
 		$listing_page  = new ListingPageController();
 		$listing_form  = new ListingFormPageController();
+		$sessions      = new Session();
+		
+		$this->loader->add_action( 'init', $sessions, 'register' );
 		
 		$this->loader->add_action( 'wp_enqueue_scripts', $plugin_public, 'enqueue_styles' );
 		$this->loader->add_action( 'wp_enqueue_scripts', $plugin_public, 'enqueue_scripts' );

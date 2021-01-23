@@ -1,7 +1,14 @@
 <?php 
     use Autobrunei\Utils\Request;
+use Autobrunei\Utils\Session;
+
 ?>
 
+<?php if(Session::exist('error')): ?>
+
+    <p style="font-size: 1.5em; color: red; font-weight: bold;"><?= Session::get('error'); ?></p>
+
+<?php endif;?>
 <div class="ab-form-layout">
     <?php require_once "_sidebar.php"; ?>
     <div class="ab-content">

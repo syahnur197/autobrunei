@@ -11,7 +11,7 @@ use Autobrunei\Data\Helper as DataHelper;
 /**
  * Aku pakai interface just to make the models methods are consistent
  */
-class Listing implements CptInterface
+class ListingCpt implements CptInterface
 {
 
     public function create_post_type()

@@ -6,6 +6,8 @@ use Autobrunei\Data\Helper;
 use Autobrunei\Entities\Listing;
 use Autobrunei\Main;
 use Autobrunei\Utils\Request;
+use Autobrunei\Utils\Session;
+use Exception;
 
 class ListingFormPageController
 {
@@ -36,16 +38,27 @@ class ListingFormPageController
     // Payload: action=save_ab_listing
     public function save_ab_listing()
     {
-        Request::validate_post_request();
+        try {
+            $this->_validate_save_post();
+    
+            $listing = $this->_get_listing_object();
+    
+            $success = $listing->save();
+    
+            wp_redirect( wp_get_referer() );
+            exit;
+        } catch (Exception $e) {
+            Session::set('error', $e->getMessage());
+            wp_redirect( wp_get_referer() );
+            exit;
+        }
+    }
 
-        Request::validate_nonce();
+    private function _validate_save_post()
+    {
+        if ( !Request::validate_post_request()['success'] ) throw new Exception('Not a post request!');
 
-        $listing = $this->_get_listing_object();
-
-        $success = $listing->save();
-
-        wp_redirect( wp_get_referer() );
-        exit;
+        if ( !Request::validate_nonce()['success'] ) throw new Exception('Invalid nonce!');
     }
 
     private function _get_listing_object()

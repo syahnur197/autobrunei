@@ -48,32 +48,28 @@ class Listing
 
     public function save()
     {
-        try {
-            $post_arr = [
-                'post_title' => $this->title,
-                'post_status' => 'published',
-                'post_type' => self::POST_TYPE,
-                'comment_status' => 'closed',
-            ];
+        $post_arr = [
+            'post_title' => $this->title,
+            'post_status' => 'published',
+            'post_type' => self::POST_TYPE,
+            'comment_status' => 'closed',
+        ];
 
-            if (!is_numeric($this->id)) {
-                $this->id = wp_insert_post($post_arr);
-            } else {
-                $post_arr['ID'] = $this->id;
-                wp_update_post($post_arr);
-            }
-            
-
-            $this->_validate_listing_data();
-    
-            $this->_save_listing_metas();
-    
-            $this->wp_post = get_post($this->id);
-
-            return true;
-        } catch (Exception $e) {
-            return false;
+        if (!is_numeric($this->id)) {
+            $this->id = wp_insert_post($post_arr);
+        } else {
+            $post_arr['ID'] = $this->id;
+            wp_update_post($post_arr);
         }
+        
+
+        $this->_validate_listing_data();
+
+        $this->_save_listing_metas();
+
+        $this->wp_post = get_post($this->id);
+
+        return true;
 
     }
 
