@@ -27,10 +27,10 @@ class Listing
     private string $price;
     private string $sale_price;
     private string $sold;
-    private array $features;
+    private $features;
     private string $sellers_note;
     private string $featured_image_url;
-    private array $images_urls;
+    private $images_urls;
 
     private $wp_post;
 
