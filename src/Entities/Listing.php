@@ -4,6 +4,7 @@ namespace Autobrunei\Entities;
 
 use Autobrunei\Data\Helper;
 use Exception;
+use WP_Post;
 
 class Listing
 {
@@ -58,6 +59,15 @@ class Listing
         if (!is_numeric($this->id)) {
             $this->id = wp_insert_post($post_arr);
         } else {
+
+            // check if current user owns the listing
+            $author_id = (int) $this->get_wp_post()->post_author;
+            $current_user_id = get_current_user_id();
+
+            if ($author_id !== $current_user_id) {
+                throw new Exception('You don\'t own this listing!');
+            }
+
             $post_arr['ID'] = $this->id;
             wp_update_post($post_arr);
         }
@@ -71,6 +81,17 @@ class Listing
 
         return true;
 
+    }
+
+    public function get_wp_post()
+    {
+        if (isset($this->wp_post) && $this->wp_post instanceof WP_Post) {
+            return $this->wp_post;
+        }
+
+        $this->wp_post = get_post($this->id);
+
+        return $this->wp_post;
     }
 
     public static function get_listing_by_id($post_id)
@@ -136,6 +157,7 @@ class Listing
             // existing listing
             $this->id = $data->ID;
             $this->_parse_features();
+            $this->get_wp_post();
         }
     }
 
