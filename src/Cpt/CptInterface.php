@@ -1,8 +1,8 @@
 <?php
 
-namespace Autobrunei\Models;
+namespace Autobrunei\Cpt;
 
-interface ModelInterface
+interface CptInterface
 {
     public function create_post_type();
 

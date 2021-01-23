@@ -1,5 +1,5 @@
 /**
- * All of the CSS for your public-facing functionality should be
+ * All of the CSS for your admin-specific functionality should be
  * included in this file.
  */
 
@@ -115,8 +115,8 @@
 
 .ab-feature-row {
   /* display: grid;
-      grid-template-columns: 10% 90%;
-      column-gap: 1em; */
+    grid-template-columns: 10% 90%;
+    column-gap: 1em; */
   margin-top: 0.5em;
   margin-bottom: 0.5em;
 }

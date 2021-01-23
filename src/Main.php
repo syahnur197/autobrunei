@@ -16,9 +16,10 @@ use Autobrunei\Utils\Loader;
 use Autobrunei\Utils\Internationalization;
 use Autobrunei\Admin\Controller as AdminController;
 use Autobrunei\Controllers\Admin\ListingController;
+use Autobrunei\Controllers\Front\ListingFormPageController;
 use Autobrunei\Controllers\Front\ListingPageController;
 use Autobrunei\Front\Controller as FrontController;
-use Autobrunei\Models\Listing;
+use Autobrunei\Cpt\Listing;
 use Autobrunei\Utils\AdminNotice;
 
 /**
@@ -136,14 +137,14 @@ class Main {
         $this->loader->add_action( 'manage_ab-listings_posts_custom_column', $listing_model, 'custom_column', 10, 2 );
 		
 		$this->loader->add_action( 'wp_ajax_get_models_by_brand', $listing_controller, 'get_models_by_brand' );
-
+		
 		
 		$this->loader->add_action('admin_notices', new AdminNotice(), 'displayAdminNotice');
 		
-
+		
 	}
-
-
+	
+	
 	/**
 	 * Register all of the hooks related to the public-facing functionality
 	 * of the plugin.
@@ -152,17 +153,24 @@ class Main {
 	 * @access   private
 	 */
 	private function define_public_hooks() {
-
+		
 		$plugin_public = new FrontController( $this->get_plugin_name(), $this->get_version() );
-		$listing_page = new ListingPageController();
-
+		$listing_page  = new ListingPageController();
+		$listing_form  = new ListingFormPageController();
+		
 		$this->loader->add_action( 'wp_enqueue_scripts', $plugin_public, 'enqueue_styles' );
 		$this->loader->add_action( 'wp_enqueue_scripts', $plugin_public, 'enqueue_scripts' );
-
+		
 		if (!is_admin()) {
 			// add booking view shortcode
 			$this->loader->add_shortcode( 'all_listings_view', $listing_page, 'all_listings_view' );
-        }
+			
+			// listing form
+			$this->loader->add_shortcode( 'listing_form_view', $listing_form, 'listing_form_view' );
+		}
+		
+		$this->loader->add_action( 'wp_ajax_save_ab_listing', $listing_form, 'save_ab_listing' );
+		$this->loader->add_action( 'wp_ajax_nopriv_save_ab_listing', $listing_form, 'save_ab_listing' );
 
 	}
 

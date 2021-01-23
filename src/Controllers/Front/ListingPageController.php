@@ -7,6 +7,7 @@ use Autobrunei\Main;
 
 class ListingPageController
 {
+    // [all_listings_view]
     public function all_listings_view()
     {
         $brands_arr = Helper::get_brands();
@@ -19,7 +20,6 @@ class ListingPageController
         ]);
         require_once Main::get_path_from_src('Front/partials/all-listing-view/index.php');
     }
-
 
     public function filter_listings()
     {

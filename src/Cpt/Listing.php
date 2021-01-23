@@ -1,6 +1,6 @@
 <?php
 
-namespace Autobrunei\Models;
+namespace Autobrunei\Cpt;
 
 use Exception;
 use Autobrunei\Main;
@@ -11,7 +11,7 @@ use Autobrunei\Data\Helper as DataHelper;
 /**
  * Aku pakai interface just to make the models methods are consistent
  */
-class Listing implements ModelInterface
+class Listing implements CptInterface
 {
 
     public function create_post_type()
