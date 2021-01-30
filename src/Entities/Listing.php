@@ -205,7 +205,7 @@ class Listing
 
         $timestamp = time();
 
-        $this->stat_date = $timestamp;
+        $this->start_date = $timestamp;
 
         $this->end_date = strtotime('+7 day', $timestamp);
     }

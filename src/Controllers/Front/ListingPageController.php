@@ -13,11 +13,23 @@ class ListingPageController
         $brands_arr = Helper::get_brands();
         $models_arr = Helper::get_brand_models($brands_arr[0]);
         $conditions_arr = Helper::get_condititons();
+
+        $meta_query = array(
+            array(
+                'key'       => 'end_date',
+                'value'     => time(),
+                'compare'   => '>=',
+            ),
+        );
+
+
         $listings = get_posts([
             'post_type'     => 'ab-listings',
             'post_status'   => 'publish',
             'numberposts'   => -1,
+            'meta_query'    => $meta_query,
         ]);
+        
         require_once Main::get_path_from_src('Front/partials/all-listing-view/index.php');
     }
 
