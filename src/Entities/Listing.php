@@ -6,8 +6,33 @@ use Autobrunei\Data\Helper;
 use Autobrunei\Utils\FileUploader;
 use Exception;
 use WP_Post;
-use Carbon\Carbon;
 
+/**
+ * Autobrunei\Entities\Listing
+ *
+ * @method int getId()
+ * @method string getTitle()
+ * @method string getBrand()
+ * @method string getModel()
+ * @method string getBodyType()
+ * @method string getFuelType()
+ * @method string getColour()
+ * @method string getTransmission()
+ * @method string getDriveType()
+ * @method string getYear()
+ * @method string getEngineNo()
+ * @method string getCondition()
+ * @method string getMileage() Get mileage in kilometre
+ * @method string getPrice() Get "original" price
+ * @method string getSalePrice() Get Sale Price
+ * @method bool getSold()
+ * @method string getFeatures() Get json encoded features. Decode to get features as array
+ * @method string getSellersNote()
+ * @method string getFeaturedImageUrl()
+ * @method string getImagesUrl()
+ * @method string getStartDate()
+ * @method string getEndDate()
+ */
 class Listing
 {
 
@@ -99,11 +124,6 @@ class Listing
         return $this->wp_post;
     }
 
-    public function set_attachments($files)
-    {
-
-    }
-
     public static function get_listing_by_id($post_id)
     {
         $post = get_post($post_id);
@@ -159,6 +179,7 @@ class Listing
         $this->features = $data->features ?? [];
         $this->sellers_note = $data->sellers_note ?? '';
         $this->featured_image_index = $data->featured_image_index ?? '';
+        $this->featured_image_url = $data->featured_image_url ?? '';
 
         // if the object initialised has ID
         // which means data is already in DB

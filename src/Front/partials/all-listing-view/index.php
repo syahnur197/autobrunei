@@ -51,40 +51,46 @@
 
 </style>
 
+<?php 
+use Autobrunei\Entities\Listing;
+use Autobrunei\Utils\Request;
+
+?>
+
 <div>
     <div class="ab-nav-container">
         <div class="ab-nav-content">
-            <select class="ab-input ab-dropdown">
-                <option>Choose Condition</option>
+            <select class="ab-input ab-dropdown" name="condition">
+                <option <?= !isset($_GET['condition']) ? 'selected' : ''; ?>>Choose Condition</option>
                 <?php foreach($conditions_arr as $key => $condition): ?>
-                    <option value="<?= $condition ?>"
-                        <?= $key === 0 ? "selected" : "" ?>
+                    <option value="<?= $condition ?>" 
+                        <?= isset($_GET['condition']) && $_GET['condition'] == $condition ? 'selected' : ''; ?>
                     ><?= $condition; ?></option>
                 <?php endforeach;?>
             </select>
         </div>
         <div class="ab-nav-content">
-            <select class="ab-input ab-dropdown">
-                <option>Choose Brand</option>
+            <select class="ab-input ab-dropdown" name="brand" id="brand">
+                <option <?= !isset($_GET['condition']) ? 'brand' : ''; ?>>Choose Brand</option>
                 <?php foreach($brands_arr as $key => $brand): ?>
                     <option value="<?= $brand ?>"
-                        <?= $key === 0 ? "selected" : "" ?>
+                        <?= isset($_GET['brand']) && $_GET['brand'] == $brand ? 'selected' : ''; ?>
                     ><?= $brand; ?></option>
                 <?php endforeach;?>
             </select>
         </div>
         <div class="ab-nav-content">
-            <select class="ab-input ab-dropdown">
-                <option>Choose Model</option>
+            <select class="ab-input ab-dropdown" name="model" id="model">
+                <option <?= !isset($_GET['condition']) ? 'model' : ''; ?>>Choose Model</option>
                 <?php foreach($models_arr as $key => $model): ?>
                     <option value="<?= $model ?>"
-                        <?= $key === 0 ? "selected" : "" ?>
+                        <?= isset($_GET['model']) && $_GET['model'] == $model ? 'selected' : ''; ?>
                     ><?= $model; ?></option>
                 <?php endforeach;?>
             </select>
         </div>
         <div class="ab-nav-content">
-            <button class="ab-input ab-button">
+            <button class="ab-input ab-button" id="search_button" type="button">
                 Search
             </button>
         </div>
@@ -92,34 +98,122 @@
 </div>
 
 <div class="ab-listings-container">
-    <?php foreach($listings as $listing): ?>
-        <div class="ab-listing">
-            <img class="ab-listing-image" src="<?= $listing->featured_image_url?>">
+    <?php if($loop->have_posts()): ?>
+        <?php while ($loop->have_posts()): ?>
+            <?php 
+                $loop->the_post();
+                $listing = new Listing($loop->post);
+            ?>
+            <div class="ab-listing">
+                <img class="ab-listing-image" src="<?= $listing->getFeaturedImageUrl(); ?>">
 
-            <div class="ab-listing-detail">
-                <h5 class="ab-listing-data">
-                    <?= $listing->post_title; ?>
-                </h5>
-                <h5 class="ab-listing-data">
-                    B$ <?= $listing->sale_price; ?>
-                </h5>
+                <div class="ab-listing-detail">
+                    <h5 class="ab-listing-data">
+                        <?= $listing->getTitle(); ?>
+                    </h5>
+                    <h5 class="ab-listing-data">
+                        B$ <?= $listing->getSalePrice(); ?>
+                    </h5>
+                </div>
+
+                <hr>
+
+                <div class="ab-listing-detail">
+                    <h6 class="ab-listing-data">
+                        <?= $listing->getMileage(); ?> km
+                    </h6>
+                    <h6 class="ab-listing-data">
+                    <?= $listing->getTransmission(); ?>
+                    </h6>
+                </div>
             </div>
-
-            <hr>
-
-            <div class="ab-listing-detail">
-                <h6 class="ab-listing-data">
-                    <?= $listing->mileage; ?> km
-                </h6>
-                <h6 class="ab-listing-data">
-                <?= $listing->transmission; ?>
-                </h6>
-            </div>
-        </div>
-    <?php endforeach; ?>
+        <?php endwhile; ?>
+    <?php endif; ?>
+    <?php 
+        wp_reset_postdata();
+        wp_reset_query();
+    ?>
 </div>
 
 <script>
+jQuery(document).ready(function($) {
+    let search_object = {};
+
+    let ignore_strings = ['Choose Condition', 'Choose Brand', 'Choose Model'];
+
+    let url = "";
+
+    // models formatter
+    function update_models_options(models) {
+        let html_string = "<option selected>Choose Model</option>";
+
+        models.forEach(model => {
+            html_string += `<option value='${model}'>${model}</option>`;
+        });
+
+        $("#model").html(html_string);
+    }
+
+    // fetch models based on brand
+    function fetch_brand_models(brand) {
+        let query_object = {
+            action: 'get_models_by_brand',
+            brand: brand,
+            nonce: '<?= Request::get_nonce(); ?>'
+        };
+
+        let query_string = new URLSearchParams(query_object).toString();
+
+        let url = `${ajaxurl}?${query_string}`;
+
+        let models = null;
+
+        $.get(url, function(data) {
+            models = data.data.models;
+            update_models_options(models);
+        })
+        .fail(function(data) {
+            console.error(data.data.message);
+        });
+    }
+
+    $('.ab-dropdown').on('change', function(e) {
+        const element = e.target;
+
+        const name = $(element).attr('name');
+
+        const value = $(element).val();
+
+        if (ignore_strings.includes(value)) {
+            // delete the keys
+            delete search_object[name]; 
+            return;
+        }
+
+        search_object = {
+            ...search_object,
+            [name] : $(element).val(),
+        }
+
+        const query_string = new URLSearchParams(search_object).toString();
+
+        const current_url = window.location.href.split('?')[0];
+
+        url = `${current_url}?${query_string}`;
+
+    });
+
+    $("#search_button").on("click", function(e) {
+        window.location = url;
+    });
+
+    // fetching models based on brand
+    $(document).on('change', "#brand", function(e) {
+        let brand = $(this).val();
+
+        let models = fetch_brand_models(brand);
+    });
+});
 
 </script>
 
