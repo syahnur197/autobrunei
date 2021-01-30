@@ -9,8 +9,8 @@
         <?php require_once "_content-features.php"; ?>
         <?php require_once "_content-images.php"; ?>
         <input type="hidden" name="nonce" value="<?= Request::get_nonce(); ?>"/>
-        <input type="hidden" name="featured_image_url" id="featured_image_url"/>
-        <input type="hidden" name="images_urls" id="images_urls"/> 
+        <input type="hidden" name="featured_image_url" id="featured_image_url" value="<?= $listing->featured_image_url; ?>"/>
+        <input type="hidden" name="images_urls" id="images_urls" value='<?= $listing->images_urls; ?>'/> 
         <input type="hidden" name="save_post" value="1"/>
     </div>
 </div>

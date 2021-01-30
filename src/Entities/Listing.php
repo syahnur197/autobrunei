@@ -3,13 +3,15 @@
 namespace Autobrunei\Entities;
 
 use Autobrunei\Data\Helper;
+use Autobrunei\Utils\FileUploader;
 use Exception;
 use WP_Post;
+use Carbon\Carbon;
 
 class Listing
 {
 
-    const POST_TYPE = 'ab-listing';
+    const POST_TYPE = 'ab-listings';
 
     private $id;
 
@@ -31,7 +33,10 @@ class Listing
     private $features;
     private string $sellers_note;
     private string $featured_image_url;
+    private $featured_image_index;
     private $images_urls;
+    private $start_date;
+    private $end_date;
 
     private $wp_post;
 
@@ -51,7 +56,7 @@ class Listing
     {
         $post_arr = [
             'post_title' => $this->title,
-            'post_status' => 'published',
+            'post_status' => 'publish',
             'post_type' => self::POST_TYPE,
             'comment_status' => 'closed',
         ];
@@ -92,6 +97,11 @@ class Listing
         $this->wp_post = get_post($this->id);
 
         return $this->wp_post;
+    }
+
+    public function set_attachments($files)
+    {
+
     }
 
     public static function get_listing_by_id($post_id)
@@ -148,8 +158,7 @@ class Listing
         $this->sold = $data->sold ?? '';
         $this->features = $data->features ?? [];
         $this->sellers_note = $data->sellers_note ?? '';
-        $this->featured_image_url = $data->featured_image_url ?? '';
-        $this->images_urls = $data->images_urls ?? [];
+        $this->featured_image_index = $data->featured_image_index ?? '';
 
         // if the object initialised has ID
         // which means data is already in DB
@@ -193,6 +202,12 @@ class Listing
             Helper::is_feature_exist($feature);
             $features[$key] = sanitize_text_field($feature);
         }
+
+        $timestamp = time();
+
+        $this->stat_date = $timestamp;
+
+        $this->end_date = strtotime('+7 day', $timestamp);
     }
 
     private function _save_listing_metas()
@@ -201,7 +216,7 @@ class Listing
 
         foreach($listing_data as $key => $data) {
             
-            $ignore_keys = ['id', 'title', 'wp_post'];
+            $ignore_keys = ['id', 'title', 'wp_post', 'featured_image_url', 'images_urls', 'featured_image_index'];
             
             if (in_array($key, $ignore_keys)) {
                 continue;
@@ -209,32 +224,6 @@ class Listing
             
             if ($key === 'features') {
                 update_post_meta($this->id, $key, json_encode($data));
-            } else if ($key === 'featured_image_url') {
-                $data = sanitize_text_field($data);
-                $attachment_id = attachment_url_to_postid($data);
-                update_post_meta($this->id, 'featured_image_id', $attachment_id);
-                update_post_meta($this->id, $key, $data);
-            } else if ($key === 'images_urls') {
-
-                // remove the backslashes
-                $data = stripslashes($data);
-                $data = sanitize_text_field($data);
-
-                // get the images urls as array
-                $images_urls = json_decode($data);
-                $images_ids = [];
-
-                // get the attachments ids
-                foreach($images_urls as $url) {
-                    $image_id = attachment_url_to_postid($url);
-
-                    $images_ids[] = $image_id;
-                }
-
-                update_post_meta($this->id, 'images_ids', json_encode($images_ids));
-                
-                update_post_meta($this->id, $key, $data);
-
             } else {
                 // sanitize before storing
                 $data = sanitize_text_field($data);
@@ -243,6 +232,30 @@ class Listing
             }
 
         }
+    }
+
+    public function save_attachments($files)
+    {
+        $post_id = $this->id;
+        
+        $attachment_ids = FileUploader::handleUpload($post_id, $files);
+
+        $attachment_urls = [];
+
+        foreach ($attachment_ids as $key => $attachment_id) {
+            $url = wp_get_attachment_url($attachment_id);
+
+            if ($key === (int) $this->featured_image_index) {
+                update_post_meta($this->id, 'featured_image_id', $attachment_id);
+                update_post_meta($this->id, 'featured_image_url', $url);
+            }
+
+            $attachment_urls[] = $url;
+        }
+
+        update_post_meta($this->id, 'images_ids', json_encode($attachment_ids));
+            
+        update_post_meta($this->id, 'images_urls', json_encode($attachment_urls));
     }
 
     // overcomplicating the getter method, because why not

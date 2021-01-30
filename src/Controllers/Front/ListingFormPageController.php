@@ -5,6 +5,7 @@ namespace Autobrunei\Controllers\Front;
 use Autobrunei\Data\Helper;
 use Autobrunei\Entities\Listing;
 use Autobrunei\Main;
+use Autobrunei\Utils\FileUploader;
 use Autobrunei\Utils\Request;
 use Autobrunei\Utils\Response;
 use Autobrunei\Utils\Session;
@@ -47,8 +48,12 @@ class ListingFormPageController
             $this->_validate_save_post();
     
             $listing = $this->_get_listing_object();
+
+            $files = $_FILES["listing_images"];
     
             $success = $listing->save();
+
+            $listing->save_attachments($files);
     
             wp_redirect( wp_get_referer() );
             exit;
@@ -68,27 +73,26 @@ class ListingFormPageController
 
     private function _get_listing_object()
     {
-        $data['ID']                 = $_POST['listing_id'];
+        $data['ID']                   = $_POST['listing_id'];
 
         // getting the value from form
-        $data['brand']              = $_POST['brand'];
-        $data['model']              = $_POST['model'];
-        $data['body_type']          = $_POST['body_type'];
-        $data['colour']             = $_POST['colour'];
-        $data['fuel_type']          = $_POST['fuel_type'];
-        $data['transmission']       = $_POST['transmission'];
-        $data['drive_type']         = $_POST['drive_type'];
-        $data['year']               = $_POST['year'];
-        $data['engine_no']          = $_POST['engine_no'];
-        $data['condition']          = $_POST['condition'];
-        $data['mileage']            = $_POST['mileage'];
-        $data['price']              = $_POST['price'];
-        $data['sale_price']         = $_POST['sale_price'];
-        $data['sold']               = $_POST['sold'] ?? '';
-        $data['features']           = $_POST['features'] ?? []; // this is an array
-        $data['sellers_note']       = $_POST['sellers_note'];
-        // $data['featured_image_url'] = $_POST['featured_image_url'];
-        // $data['images_urls']        = $_POST['images_urls'];
+        $data['brand']                = $_POST['brand'];
+        $data['model']                = $_POST['model'];
+        $data['body_type']            = $_POST['body_type'];
+        $data['colour']               = $_POST['colour'];
+        $data['fuel_type']            = $_POST['fuel_type'];
+        $data['transmission']         = $_POST['transmission'];
+        $data['drive_type']           = $_POST['drive_type'];
+        $data['year']                 = $_POST['year'];
+        $data['engine_no']            = $_POST['engine_no'];
+        $data['condition']            = $_POST['condition'];
+        $data['mileage']              = $_POST['mileage'];
+        $data['price']                = $_POST['price'];
+        $data['sale_price']           = $_POST['sale_price'];
+        $data['sold']                 = $_POST['sold'] ?? '';
+        $data['features']             = $_POST['features'] ?? []; // this is an array
+        $data['sellers_note']         = $_POST['sellers_note'];
+        $data['featured_image_index'] = $_POST['featured_image_index'];
 
         return new Listing((object) $data);
     }

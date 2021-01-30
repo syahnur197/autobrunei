@@ -19,5 +19,5 @@
     
     </div>
 
-    <button class="ab-upload-listing-img-btn ab-btn ab-btn-primary">Upload Image</button>
+    <input type="file" id="listing_images" name="listing_images[]" multiple class="ab-upload-listing-img-input ab-btn ab-btn-primary" accept="image/*"/>
 </div>

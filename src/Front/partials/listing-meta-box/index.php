@@ -17,10 +17,9 @@ use Autobrunei\Utils\Session;
             <?php require_once "_content-features.php"; ?>
             <?php require_once "_content-images.php"; ?>
             <input type="hidden" name="nonce" value="<?= Request::get_nonce(); ?>"/>
-            <input type="hidden" name="featured_image_url" id="featured_image_url"/>
-            <input type="hidden" name="images_urls" id="images_urls"/> 
             <input type="hidden" name="action" value="save_ab_listing"/>
             <input type="hidden" name="listing_id" value="<?= $_GET['listing_id'] ?? ''; ?>"/>
+            <input type="hidden" id="featured_image_index" name="featured_image_index" value="0" />
             <input type="submit" value="Submit">
         </form>
     </div>
@@ -28,6 +27,9 @@ use Autobrunei\Utils\Session;
 
 <script>
     jQuery(document).ready(function($) {
+
+        let selected_image_sources_array = [];
+        let featured_image_index = 0;
 
         // models formatter
         function update_models_options(models) {
@@ -77,10 +79,6 @@ use Autobrunei\Utils\Session;
             $(`.ab-list-item[data-content='${content}']`).addClass('active');
         }
 
-        const selected_brand = $('#brand').val();
-
-        // fetch_brand_models(selected_brand);
-
         // handling sidebar
         $(document).on('click', '.ab-list-item', function(e) {
             let content = $(this).data('content');
@@ -113,64 +111,84 @@ use Autobrunei\Utils\Session;
             if (clicked_img_src !== featured_img_src) {
                 featured_img.attr('src', clicked_img_src);
 
-                // update the featured image url hidden input
-                $("#featured_image_url").val(clicked_img_src);
+                // getting the featured image index
+                featured_image_index = selected_image_sources_array.indexOf(clicked_img_src);
+
+                // setting the featured image index based on the image clicked by the user
+                $("#featured_image_index").val(featured_image_index);
             }
         });
 
-        $(document).on("click", ".ab-upload-listing-img-btn", function (e) {
-            e.preventDefault();
-            let $button = $(this);
+        $(document).on("change", ".ab-upload-listing-img-input", function(e) {
+            const element = e.target;
+            const files = element.files;
 
+            if (!FileReader || !files || !files.length) {
+                console.error('operation not supported!')
+                return;
+            }
 
-            // Create the media frame.
-            let file_frame = wp.media.frames.file_frame = wp.media({
-                title: 'Select or upload image',
-                library: { 
-                    type: 'image' 
-                },
-                button: {
-                    text: 'Select'
-                },
-                multiple: true
-            });
+            const images_src_array = [];
+            
+            for (let i = 0; i < files.length; i++) {
+                const file = files[i];
 
-            // When an image is selected, run a callback.
-            file_frame.on('select', function () {
-                $('#ab-featured-img').attr('src', '');
+                const file_reader = new FileReader();
 
-                let featured_img = file_frame.state().get('selection').first().toJSON();
+                file_reader.onload = async function(e) {
+                    images_src_array.push(e.target.result);
 
-                $('#ab-featured-img').attr('src', featured_img.url);
+                    // return early if index is not the last file
+                    if (i !== files.length - 1) {
+                        return;
+                    }
 
-                // update the featured image url hidden input
-                $("#featured_image_url").val(featured_img.url);
+                    // I'm doing this for the sake of selected featured image
+                    selected_image_sources_array = images_src_array;
+
+                    // run these functions at the end of the loop
+                    // the reason why I put it here instead at below file_reader.readAsDataURL(file)
+                    // because of the asynchronous nature of FileReader
+                    update_features_image(images_src_array[0]);
+                    update_images(images_src_array);
+                }
                 
-                let selections = file_frame.state().get('selection');
+                file_reader.readAsDataURL(file);
+            }
 
-                let img_container_string = "";
-                let img_container = $(".ab-img-container");
-                img_container.empty();
+        });
 
-                let images_urls_array = [];
+        function update_features_image(image_source_str) {
+            $('#ab-featured-img').attr('src', image_source_str);
 
-                selections.map( function( attachment ) {
-                    attachment = attachment.toJSON();
-                    img_container_string += `<img src="${attachment.url}" class="non-featured-img" alt=""/>`;
+            // update the featured image url hidden input
+            // $("#featured_image_url").val(image_source_str);
+        }
 
-                    images_urls_array.push(attachment.url);
-                });
+        function update_images(images_src_array) {
+            if (!Array.isArray(images_src_array)) {
+                console.error('Argument is not an array!');
+                return;
+            }
 
-                // update the images urls hidden input
-                $("#images_urls").val(JSON.stringify(images_urls_array));
+            let img_container_string = "";
+            let img_container = $(".ab-img-container");
+            img_container.empty();
 
-                img_container_string += `<p>Click one of the images above to change the featured image</p>`;
+            let images_urls_array = [];
 
-                $(".ab-img-container").append(img_container_string);
+            images_src_array.map(function(image_src) {
+                img_container_string += `<img src="${image_src}" class="non-featured-img" alt=""/>`;
+
+                images_urls_array.push(image_src);
             });
 
-            // Finally, open the modal
-            file_frame.open();
-        });
+            // update the images urls hidden input
+            // $("#images_urls").val(JSON.stringify(images_urls_array));
+
+            img_container_string += `<p>Click one of the images above to change the featured image</p>`;
+
+            $(".ab-img-container").append(img_container_string);
+        }
     });
 </script>
