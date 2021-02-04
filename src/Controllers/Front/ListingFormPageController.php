@@ -5,7 +5,6 @@ namespace Autobrunei\Controllers\Front;
 use Autobrunei\Data\Helper;
 use Autobrunei\Entities\Listing;
 use Autobrunei\Main;
-use Autobrunei\Utils\FileUploader;
 use Autobrunei\Utils\Request;
 use Autobrunei\Utils\Response;
 use Autobrunei\Utils\Session;
@@ -33,9 +32,16 @@ class ListingFormPageController
         $selected_brand        = Helper::get_brands()[0];
         $models_arr            = Helper::get_brand_models($selected_brand);
 
-        $listing               = isset($_GET['listing_id']) 
-                                    ? Listing::get_listing_by_id($_GET['listing_id']) 
-                                    : new Listing();
+
+        // initialise the listing object
+        $listing = isset($_GET['listing_id']) 
+            ? Listing::get_listing_by_id($_GET['listing_id']) 
+            : new Listing();
+
+        // if other users try to edit the listing, show 404
+        if (isset($_GET['listing_id']) && (int) $listing->getWpPost()->post_author !== (int) get_current_user_id()) {
+            Response::not_found();
+        }
 
         require_once Main::get_path_from_src('Front/partials/listing-meta-box/index.php');
     }
@@ -50,10 +56,15 @@ class ListingFormPageController
             $listing = $this->_get_listing_object();
 
             $files = $_FILES["listing_images"];
-    
+
             $success = $listing->save();
 
-            $listing->save_attachments($files);
+            // in the frontend, I changed the value of files_uploaded to "1"
+            // whenever the user uploaded new files from the input
+            // with a class of .ab-upload-listing-img-input
+            $files_uploaded = $_POST['files_uploaded'] === "1";
+
+            $listing->save_attachments($files, $files_uploaded);
     
             wp_redirect( wp_get_referer() );
             exit;

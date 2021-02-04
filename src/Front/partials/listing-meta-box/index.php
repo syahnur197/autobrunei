@@ -19,7 +19,6 @@ use Autobrunei\Utils\Session;
             <input type="hidden" name="nonce" value="<?= Request::get_nonce(); ?>"/>
             <input type="hidden" name="action" value="save_ab_listing"/>
             <input type="hidden" name="listing_id" value="<?= $_GET['listing_id'] ?? ''; ?>"/>
-            <input type="hidden" id="featured_image_index" name="featured_image_index" value="0" />
             <input type="submit" value="Submit">
         </form>
     </div>
@@ -27,8 +26,16 @@ use Autobrunei\Utils\Session;
 
 <script>
     jQuery(document).ready(function($) {
+        <?php 
+            $selected_image_sources_array = "";
+            if ($listing->getImagesIds() !== null) {
+                foreach(json_decode($listing->getImagesUrls()) as $url) {
+                    $selected_image_sources_array .= "'" . $url . "',";
+                }
+            }
+        ?>
 
-        let selected_image_sources_array = [];
+        let selected_image_sources_array = [<?= $selected_image_sources_array; ?>];
         let featured_image_index = 0;
 
         // models formatter
@@ -155,6 +162,9 @@ use Autobrunei\Utils\Session;
                 
                 file_reader.readAsDataURL(file);
             }
+
+            // to check whether file is uploaded through the file input form
+            $("#files_uploaded").val("1");
 
         });
 

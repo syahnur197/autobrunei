@@ -28,10 +28,13 @@ use WP_Post;
  * @method bool getSold()
  * @method string getFeatures() Get json encoded features. Decode to get features as array
  * @method string getSellersNote()
+ * @method string getFeaturedImageId()
  * @method string getFeaturedImageUrl()
+ * @method string getImagesIds()
  * @method string getImagesUrl()
  * @method string getStartDate()
  * @method string getEndDate()
+ * @method WP_Post getWpPost()
  */
 class Listing
 {
@@ -58,7 +61,9 @@ class Listing
     private $features;
     private string $sellers_note;
     private string $featured_image_url;
+    private string $featured_image_id;
     private $featured_image_index;
+    private $images_ids;
     private $images_urls;
     private $start_date;
     private $end_date;
@@ -186,6 +191,13 @@ class Listing
         if (isset($data->ID)) {
             // existing listing
             $this->id = $data->ID;
+
+            // I've added the below properties on 4 february for viewing and edit existing listing purpose
+            $this->featured_image_id = (string) $data->featured_image_id ?? '';
+            $this->images_ids = $data->images_ids ?? '';
+            $this->images_urls = $data->images_urls ?? '';
+            // edit 4 february
+
             $this->_parse_features();
             $this->get_wp_post();
         }
@@ -237,13 +249,18 @@ class Listing
 
         foreach($listing_data as $key => $data) {
             
-            $ignore_keys = ['id', 'title', 'wp_post', 'featured_image_url', 'images_urls', 'featured_image_index'];
+            // ignore keys that we dont want to update in the database in this operation
+            // some of the keys i.e., featured_image_url and images_urls are handled
+            // somewhere else
+            $ignore_keys = ['id', 'title', 'wp_post', 'featured_image_url', 'images_urls'];
             
+            // skip ignored keys
             if (in_array($key, $ignore_keys)) {
                 continue;
             }
             
             if ($key === 'features') {
+                // json encode the features
                 update_post_meta($this->id, $key, json_encode($data));
             } else {
                 // sanitize before storing
@@ -255,17 +272,23 @@ class Listing
         }
     }
 
-    public function save_attachments($files)
+    public function save_attachments($files, $files_uploaded)
     {
         $post_id = $this->id;
         
-        $attachment_ids = FileUploader::handleUpload($post_id, $files);
+        $attachment_ids = $files_uploaded
+            // if files are uploaded handle file upload
+            ? FileUploader::handleUpload($post_id, $files)
+
+            // otherwise just get the images ids in the front end
+            : json_decode($_POST['images_ids']);
 
         $attachment_urls = [];
 
         foreach ($attachment_ids as $key => $attachment_id) {
             $url = wp_get_attachment_url($attachment_id);
 
+            // select the feature image url based on the featured image index selected
             if ($key === (int) $this->featured_image_index) {
                 update_post_meta($this->id, 'featured_image_id', $attachment_id);
                 update_post_meta($this->id, 'featured_image_url', $url);
@@ -281,6 +304,7 @@ class Listing
 
     // overcomplicating the getter method, because why not
     // I might regret this in the future but oh wells
+    // edit 4 february 2021: I regret it
     public function __call($name, $argument)
     {
         if (substr($name, 0, 3) === 'get') {

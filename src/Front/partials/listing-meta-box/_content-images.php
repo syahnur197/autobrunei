@@ -3,21 +3,24 @@
 
     <div class="ab-featured-img-container">
 
-        <?php if (isset($listing->featured_image_id)): ?>
-            <img id="ab-featured-img" slt="" src="<?= $listing->featured_image_url; ?>"/>
+        <?php if ($listing->getFeaturedImageId() !== null): ?>
+            <img id="ab-featured-img" slt="" src="<?= $listing->getFeaturedImageUrl(); ?>"/>
+            <input type="hidden" id="featured_image_index" name="featured_image_index" value="<?= $listing->getFeaturedImageIndex(); ?>" />
         <?php else: ?>
             <img id="ab-featured-img" alt=""/>
+            <input type="hidden" id="featured_image_index" name="featured_image_index" value="0" />
         <?php endif;?>
     </div>
 
     <div class="ab-img-container">
-        <?php if (isset($listing->images_ids)): ?>
-            <?php foreach(json_decode($listing->images_urls) as $url): ?>
+        <?php if ($listing->getImagesIds() !== null): ?>
+            <?php foreach(json_decode($listing->getImagesUrls()) as $url): ?>
                 <img src="<?= $url; ?>" class="non-featured-img" alt=""/>
             <?php endforeach; ?>
+            <input type="hidden" id="images_ids" name="images_ids" value="<?= $listing->getImagesIds(); ?>" />
         <?php endif; ?>
-    
     </div>
 
+    <input type="hidden" id="files_uploaded" name="files_uploaded" value="0" />
     <input type="file" id="listing_images" name="listing_images[]" multiple class="ab-upload-listing-img-input ab-btn ab-btn-primary" accept="image/*"/>
 </div>
