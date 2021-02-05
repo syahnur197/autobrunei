@@ -1,5 +1,7 @@
-<?php 
-    use Autobrunei\Utils\Request;
+<?php
+
+use Autobrunei\Main;
+use Autobrunei\Utils\Request;
 use Autobrunei\Utils\Session;
 
 ?>
@@ -24,9 +26,17 @@ use Autobrunei\Utils\Session;
     </div>
 </div>
 
+<?php require_once Main::get_path_from_src('Front/partials/shared/_update-model-script.php'); ?>
+
+
 <script>
+    <?php 
+        // if you are wondering why the comments are put in php block
+        // is so that it won't get rendered in the html page
+    ?>
     jQuery(document).ready(function($) {
         <?php 
+            // if $listing has images ids, put into selected_image_sources_array js variable
             $selected_image_sources_array = "";
             if ($listing->getImagesIds() !== null) {
                 foreach(json_decode($listing->getImagesUrls()) as $url) {
@@ -37,40 +47,6 @@ use Autobrunei\Utils\Session;
 
         let selected_image_sources_array = [<?= $selected_image_sources_array; ?>];
         let featured_image_index = 0;
-
-        // models formatter
-        function update_models_options(models) {
-            let html_string = "";
-
-            models.forEach(model => {
-                html_string += `<option value='${model}'>${model}</option>`;
-            });
-
-            $("#model").html(html_string);
-        }
-
-        // fetch models based on brand
-        function fetch_brand_models(brand) {
-            let query_object = {
-                action: 'get_models_by_brand',
-                brand: brand,
-                nonce: '<?= Request::get_nonce(); ?>'
-            };
-
-            let query_string = new URLSearchParams(query_object).toString();
-
-            let url = `${ajaxurl}?${query_string}`;
-
-            let models = null;
-
-            $.get(url, function(data) {
-                models = data.data.models;
-                update_models_options(models);
-            })
-            .fail(function(data) {
-                console.error(data.data.message);
-            });
-        }
 
         function navigate(content) {
             $(".ab-sub-content").removeClass('ab-d-block');
@@ -86,7 +62,10 @@ use Autobrunei\Utils\Session;
             $(`.ab-list-item[data-content='${content}']`).addClass('active');
         }
 
-        // handling sidebar
+        <?php
+            // handling sidebar
+        ?>
+
         $(document).on('click', '.ab-list-item', function(e) {
             let content = $(this).data('content');
 
@@ -97,13 +76,6 @@ use Autobrunei\Utils\Session;
             let content = $(this).data('content');
 
             navigate(content);
-        });
-
-        // fetching models based on brand
-        $(document).on('change', "#brand", function(e) {
-            let brand = $(this).val();
-
-            let models = fetch_brand_models(brand);
         });
 
         $(document).on('click', '.non-featured-img', function(e) {
@@ -118,10 +90,16 @@ use Autobrunei\Utils\Session;
             if (clicked_img_src !== featured_img_src) {
                 featured_img.attr('src', clicked_img_src);
 
-                // getting the featured image index
+                <?php 
+                    // getting the featured image index
+                ?>
+
                 featured_image_index = selected_image_sources_array.indexOf(clicked_img_src);
 
-                // setting the featured image index based on the image clicked by the user
+                <?php 
+                    // setting the featured image index based on the image clicked by the user
+                ?>
+
                 $("#featured_image_index").val(featured_image_index);
             }
         });
@@ -145,17 +123,26 @@ use Autobrunei\Utils\Session;
                 file_reader.onload = async function(e) {
                     images_src_array.push(e.target.result);
 
-                    // return early if index is not the last file
+                    <?php
+                        // return early if index is not the last file
+                    ?>
+
                     if (i !== files.length - 1) {
                         return;
                     }
 
-                    // I'm doing this for the sake of selected featured image
+                    <?php 
+                        // I'm doing this for the sake of selected featured image
+                    ?>
+
                     selected_image_sources_array = images_src_array;
 
-                    // run these functions at the end of the loop
-                    // the reason why I put it here instead at below file_reader.readAsDataURL(file)
-                    // because of the asynchronous nature of FileReader
+                    <?php 
+                        // run these functions at the end of the loop
+                        // the reason why I put it here instead at below file_reader.readAsDataURL(file)
+                        // because of the asynchronous nature of FileReader
+                    ?>
+
                     update_features_image(images_src_array[0]);
                     update_images(images_src_array);
                 }
@@ -163,16 +150,16 @@ use Autobrunei\Utils\Session;
                 file_reader.readAsDataURL(file);
             }
 
-            // to check whether file is uploaded through the file input form
+            <?php
+                // to check whether file is uploaded through the file input form
+            ?>
+
             $("#files_uploaded").val("1");
 
         });
 
         function update_features_image(image_source_str) {
             $('#ab-featured-img').attr('src', image_source_str);
-
-            // update the featured image url hidden input
-            // $("#featured_image_url").val(image_source_str);
         }
 
         function update_images(images_src_array) {
@@ -192,9 +179,6 @@ use Autobrunei\Utils\Session;
 
                 images_urls_array.push(image_src);
             });
-
-            // update the images urls hidden input
-            // $("#images_urls").val(JSON.stringify(images_urls_array));
 
             img_container_string += `<p>Click one of the images above to change the featured image</p>`;
 

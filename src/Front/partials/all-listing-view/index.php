@@ -53,8 +53,7 @@
 
 <?php 
 use Autobrunei\Entities\Listing;
-use Autobrunei\Utils\Request;
-
+use Autobrunei\Main;
 ?>
 
 <div>
@@ -135,6 +134,8 @@ use Autobrunei\Utils\Request;
     ?>
 </div>
 
+<?php require_once Main::get_path_from_src('Front/partials/shared/_update-model-script.php'); ?>
+
 <script>
 jQuery(document).ready(function($) {
     let search_object = {};
@@ -142,40 +143,6 @@ jQuery(document).ready(function($) {
     let ignore_strings = ['Choose Condition', 'Choose Brand', 'Choose Model'];
 
     let url = "";
-
-    // models formatter
-    function update_models_options(models) {
-        let html_string = "<option selected>Choose Model</option>";
-
-        models.forEach(model => {
-            html_string += `<option value='${model}'>${model}</option>`;
-        });
-
-        $("#model").html(html_string);
-    }
-
-    // fetch models based on brand
-    function fetch_brand_models(brand) {
-        let query_object = {
-            action: 'get_models_by_brand',
-            brand: brand,
-            nonce: '<?= Request::get_nonce(); ?>'
-        };
-
-        let query_string = new URLSearchParams(query_object).toString();
-
-        let url = `${ajaxurl}?${query_string}`;
-
-        let models = null;
-
-        $.get(url, function(data) {
-            models = data.data.models;
-            update_models_options(models);
-        })
-        .fail(function(data) {
-            console.error(data.data.message);
-        });
-    }
 
     $('.ab-dropdown').on('change', function(e) {
         const element = e.target;
@@ -185,7 +152,6 @@ jQuery(document).ready(function($) {
         const value = $(element).val();
 
         if (ignore_strings.includes(value)) {
-            // delete the keys
             delete search_object[name]; 
             return;
         }
@@ -205,13 +171,6 @@ jQuery(document).ready(function($) {
 
     $("#search_button").on("click", function(e) {
         window.location = url;
-    });
-
-    // fetching models based on brand
-    $(document).on('change', "#brand", function(e) {
-        let brand = $(this).val();
-
-        let models = fetch_brand_models(brand);
     });
 });
 

@@ -4,6 +4,7 @@ namespace Autobrunei\Entities;
 
 use Autobrunei\Data\Helper;
 use Autobrunei\Utils\FileUploader;
+use Autobrunei\Utils\Response;
 use Exception;
 use WP_Post;
 
@@ -85,9 +86,9 @@ class Listing
     public function save()
     {
         $post_arr = [
-            'post_title' => $this->title,
-            'post_status' => 'publish',
-            'post_type' => self::POST_TYPE,
+            'post_title'     => $this->title,
+            'post_status'    => 'publish',
+            'post_type'      => self::POST_TYPE,
             'comment_status' => 'closed',
         ];
 
@@ -96,7 +97,7 @@ class Listing
         } else {
 
             // check if current user owns the listing
-            $author_id = (int) $this->get_wp_post()->post_author;
+            $author_id       = (int) $this->get_wp_post()->post_author;
             $current_user_id = get_current_user_id();
 
             if ($author_id !== $current_user_id) {
@@ -133,8 +134,12 @@ class Listing
     {
         $post = get_post($post_id);
 
+        if ($post === null) {
+            Response::not_found();
+        }
+
         if ($post->post_type !== self::POST_TYPE) {
-            throw new Exception('Post is not a Listing!');
+            Response::not_found();
         }
 
         return new self($post);
@@ -161,6 +166,7 @@ class Listing
         $this->features = [];
         $this->sellers_note = '';
         $this->featured_image_url = '';
+        $this->featured_image_id = '';
         $this->images_urls = '';
     }
 
