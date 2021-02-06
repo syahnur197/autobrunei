@@ -139,6 +139,7 @@ class Main {
         $this->loader->add_action( 'manage_ab-listings_posts_custom_column', $listing_model, 'custom_column', 10, 2 );
 		
 		$this->loader->add_action( 'wp_ajax_get_models_by_brand', $listing_controller, 'get_models_by_brand' );
+		$this->loader->add_action( 'wp_ajax_nopriv_get_models_by_brand', $listing_controller, 'get_models_by_brand' );
 		
 		
 		$this->loader->add_action('admin_notices', new AdminNotice(), 'displayAdminNotice');
@@ -180,6 +181,9 @@ class Main {
 		
 		$this->loader->add_action( 'wp_ajax_save_ab_listing', $listing_form, 'save_ab_listing' );
 		$this->loader->add_action( 'wp_ajax_nopriv_save_ab_listing', $listing_form, 'save_ab_listing' );
+
+		$this->loader->add_action( 'wp_ajax_get_filtered_listings', $listing_shop, 'get_filtered_listings' );
+		$this->loader->add_action( 'wp_ajax_nopriv_get_filtered_listings', $listing_shop, 'get_filtered_listings' );
 
 	}
 

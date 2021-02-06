@@ -12,9 +12,6 @@
     <label for="model"><strong>Model</strong></label>
     <select name="model" id="model" class="attribute_filter">
         <option>Select Model</option>
-        <?php foreach ($models_arr as $model): ?>
-            <option value="<?= $model; ?>"><?= $model; ?></option>
-        <?php endforeach; ?>
     </select>
 </div>
 

@@ -308,6 +308,26 @@ class Listing
         update_post_meta($this->id, 'images_urls', json_encode($attachment_urls));
     }
 
+    public function to_array()
+    {
+        return [
+            'id' => $this->id,
+            'title' => $this->title,
+            'brand' => $this->brand,
+            'model' => $this->model,
+            'body_type' => $this->body_type,
+            'fuel_type' => $this->fuel_type,
+            'transmission' => $this->transmission,
+            'drive_type' => $this->drive_type,
+            'year' => $this->year,
+            'condition' => $this->condition,
+            'mileage' => $this->mileage,
+            'price' => $this->price,
+            'sale_price' => $this->sale_price,
+            'featured_image_url' => $this->featured_image_url,
+        ];
+    }
+
     // overcomplicating the getter method, because why not
     // I might regret this in the future but oh wells
     // edit 4 february 2021: I regret it

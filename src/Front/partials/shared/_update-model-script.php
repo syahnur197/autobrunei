@@ -5,7 +5,7 @@ use Autobrunei\Utils\Request;
 jQuery(document).ready(function($) {
     
     function update_models_options(models) {
-        let html_string = "";
+        let html_string = "<option>Select Model</option>";
     
         models.forEach(model => {
             html_string += `<option value='${model}'>${model}</option>`;
