@@ -19,6 +19,7 @@ use Autobrunei\Controllers\Admin\ListingController;
 use Autobrunei\Controllers\Front\ListingFormPageController;
 use Autobrunei\Controllers\Front\ListingPageController;
 use Autobrunei\Controllers\Front\ListingShopViewController;
+use Autobrunei\Controllers\Front\ViewListingPageController;
 use Autobrunei\Front\Controller as FrontController;
 use Autobrunei\Cpt\ListingCpt;
 use Autobrunei\Utils\AdminNotice;
@@ -161,8 +162,10 @@ class Main {
 		$listing_page  = new ListingPageController();
 		$listing_form  = new ListingFormPageController();
 		$listing_shop  = new ListingShopViewController();
+		$view_listing  = new ViewListingPageController();
 		$sessions      = new Session();
 		
+		// initialise session
 		$this->loader->add_action( 'init', $sessions, 'register' );
 		
 		$this->loader->add_action( 'wp_enqueue_scripts', $plugin_public, 'enqueue_styles' );
@@ -176,7 +179,10 @@ class Main {
 			$this->loader->add_shortcode( 'listing_form_view', $listing_form, 'listing_form_view' );
 
 			// listing form
-			$this->loader->add_shortcode( 'listing_show_view', $listing_shop, 'listing_show_view' );
+			$this->loader->add_shortcode( 'listing_shop_view', $listing_shop, 'listing_shop_view' );
+
+			// view listing
+			$this->loader->add_shortcode( 'view_listing', $view_listing, 'view_listing' );
 		}
 		
 		$this->loader->add_action( 'wp_ajax_save_ab_listing', $listing_form, 'save_ab_listing' );

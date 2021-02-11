@@ -13,8 +13,8 @@ class ListingShopViewController
 
     private $posts_per_page = 30;
 
-    // [listing_show_view]
-    public function listing_show_view()
+    // [listing_shop_view]
+    public function listing_shop_view()
     {
         $brands_arr            = Helper::get_brands();
         $selected_brand        = Helper::get_brands()[0];
@@ -56,7 +56,7 @@ class ListingShopViewController
         $has_prev_page = $paged > 1;
 
         // if max per page is less than current post count,
-        // we cam assume is has no next page
+        // we can assume it has no next page
         // however there will be a situation where the post count
         // is equal to the post_per_page and actually has no next page
         // but the below expression will return true

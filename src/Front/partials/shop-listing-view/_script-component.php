@@ -31,7 +31,7 @@
                 <img class="ab-listing-image" src="${listing_object.featured_image_url}">
 
                 <div class="ab-listing-description">
-                    <span class="ab-listing-title">${listing_title}</span>
+                    <span class="ab-listing-title"><a target="_blank" href="${listing_object.url}">${listing_title}</a></span>
                     <br>
 
                     <div class="ab-meta-description">

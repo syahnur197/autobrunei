@@ -7,6 +7,8 @@ use Autobrunei\Main;
 use Autobrunei\Utils\Request;
 use Autobrunei\Utils\AdminNotice;
 use Autobrunei\Data\Helper as DataHelper;
+use Autobrunei\Entities\Listing;
+use Autobrunei\Utils\ListingVisit;
 
 /**
  * Aku pakai interface just to make the models methods are consistent
@@ -243,33 +245,53 @@ class ListingCpt implements CptInterface
 
     public function set_custom_columns($columns)
     {
+        $columns['id']          = __('ID');
 		$columns['brand']       = __('Brand');
 		$columns['model']       = __('Model');
 		$columns['body_type']   = __('Body Type');
 		$columns['colour']      = __('Colour');
         $columns['year']        = __('Year');
+        $columns['visits']      = __('Visits');
+        $columns['actions']     = __('Actions');
         
         return $columns;
     }
 
     public function custom_column( $column, $post_id )
     {
-        $listing = get_post($post_id);
+        $listing = Listing::get_listing_by_id($post_id);
 
         switch ($column) {
+            case 'id':
+                echo $listing->getId();
+                break;
             case 'brand':
-                echo $listing->brand;
+                echo $listing->getBrand();
                 break;
             case 'model':
-                echo $listing->model;
+                echo $listing->getModel();
                 break;
             case 'body_type':
-                echo $listing->body_type;
+                echo $listing->getBodyType();
             case 'colour':
-                echo $listing->colour;
+                echo $listing->getColour();
                 break;
             case 'year':
-                echo $listing->year;
+                echo $listing->getYear();
+                break;
+            case 'visits':
+                echo ListingVisit::get_visit_count($listing);
+                break;
+            case 'actions':
+                echo $this->_get_view_listing_anchor_tag($listing);
+                break;
+            default:
+                echo $post_id;
+        }
     }
+
+    private function _get_view_listing_anchor_tag(Listing $listing)
+    {
+        return '<a href="' . $listing->get_view_listing_url() . '" target="_blank">View Listing</a>';
     }
 }

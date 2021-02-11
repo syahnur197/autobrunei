@@ -27,12 +27,12 @@ use WP_Post;
  * @method string getPrice() Get "original" price
  * @method string getSalePrice() Get Sale Price
  * @method bool getSold()
- * @method string getFeatures() Get json encoded features. Decode to get features as array
+ * @method array getFeatures() Get json encoded features. Decode to get features as array
  * @method string getSellersNote()
  * @method string getFeaturedImageId()
  * @method string getFeaturedImageUrl()
  * @method string getImagesIds()
- * @method string getImagesUrl()
+ * @method string getImagesUrls()
  * @method string getStartDate()
  * @method string getEndDate()
  * @method WP_Post getWpPost()
@@ -41,6 +41,8 @@ class Listing
 {
 
     const POST_TYPE = 'ab-listings';
+
+    const VIEW_LISTING_URL = 'view-listing';
 
     private $id;
 
@@ -325,7 +327,13 @@ class Listing
             'price' => $this->price,
             'sale_price' => $this->sale_price,
             'featured_image_url' => $this->featured_image_url,
+            'url' => $this->get_view_listing_url(),
         ];
+    }
+
+    public function get_view_listing_url()
+    {
+        return site_url(self::VIEW_LISTING_URL . '?listing_id=' . $this->getId());
     }
 
     // overcomplicating the getter method, because why not

@@ -11,10 +11,17 @@ class Session
         }
     }
 
-    public static function get($key)
+    /**
+     * Set $unset to false if you want to keep the session key's value
+     */
+    public static function get($key, $unset = true)
     {
         $content = $_SESSION[$key];
-        unset($_SESSION[$key]);
+
+        if ($unset) {
+            unset($_SESSION[$key]);
+        }
+
         return $content;
     }
 

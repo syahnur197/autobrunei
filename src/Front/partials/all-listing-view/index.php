@@ -108,7 +108,7 @@ use Autobrunei\Main;
 
                 <div class="ab-listing-detail">
                     <h5 class="ab-listing-data">
-                        <?= $listing->getTitle(); ?>
+                        <a target="_blank" href="<?= $listing->get_view_listing_url(); ?>"><?= $listing->getTitle(); ?></a>
                     </h5>
                     <h5 class="ab-listing-data">
                         B$ <?= $listing->getSalePrice(); ?>
