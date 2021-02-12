@@ -5,6 +5,7 @@ namespace Autobrunei\Entities;
 use Autobrunei\Data\Helper;
 use Autobrunei\Utils\FileUploader;
 use Autobrunei\Utils\Response;
+use Autobrunei\Utils\Str;
 use Exception;
 use WP_Post;
 
@@ -43,6 +44,8 @@ class Listing
     const POST_TYPE = 'ab-listings';
 
     const VIEW_LISTING_URL = 'view-listing';
+
+    const TIME_LIMIT = '+7 day';
 
     private $id;
 
@@ -95,15 +98,14 @@ class Listing
         ];
 
         if (!is_numeric($this->id)) {
+            // create new listing
             $this->id = wp_insert_post($post_arr);
         } else {
-
-            // check if current user owns the listing
-            $author_id       = (int) $this->get_wp_post()->post_author;
+            // update the listing
             $current_user_id = get_current_user_id();
 
-            if ($author_id !== $current_user_id) {
-                throw new Exception('You don\'t own this listing!');
+            if (!$this->is_author($current_user_id)) {
+                throw new Exception("You are not allowed to update someone else's listing!");
             }
 
             $post_arr['ID'] = $this->id;
@@ -132,7 +134,7 @@ class Listing
         return $this->wp_post;
     }
 
-    public static function get_listing_by_id($post_id)
+    public static function get_listing_by_id($post_id): Listing
     {
         $post = get_post($post_id);
 
@@ -148,7 +150,7 @@ class Listing
     }
 
     // execute when initialising an empty listing
-    private function _initialise_empty_listing()
+    private function _initialise_empty_listing(): void
     {
         $this->title = '';
         $this->brand = '';
@@ -172,7 +174,7 @@ class Listing
         $this->images_urls = '';
     }
 
-    private function _initialise_listing($data)
+    private function _initialise_listing($data): void
     {
         // if values are not provided, default to empty string or empty array
         $this->brand = $data->brand ?? '';
@@ -211,7 +213,7 @@ class Listing
         }
     }
 
-    private function _parse_features()
+    private function _parse_features(): void
     {
         // if the features are not an array
         // that means it might be a json
@@ -228,7 +230,7 @@ class Listing
         // features as an array
     }
 
-    private function _validate_listing_data()
+    private function _validate_listing_data(): void
     {
         // validate data
         Helper::is_brand_exist($this->brand);
@@ -248,10 +250,10 @@ class Listing
 
         $this->start_date = $timestamp;
 
-        $this->end_date = strtotime('+7 day', $timestamp);
+        $this->end_date = strtotime(self::TIME_LIMIT, $timestamp);
     }
 
-    private function _save_listing_metas()
+    private function _save_listing_metas(): void
     {
         $listing_data = get_object_vars($this);
 
@@ -276,11 +278,10 @@ class Listing
 
                 update_post_meta($this->id, $key, $data);
             }
-
         }
     }
 
-    public function save_attachments($files, $files_uploaded)
+    public function save_attachments($files, $files_uploaded): void
     {
         $post_id = $this->id;
         
@@ -292,6 +293,10 @@ class Listing
             : json_decode($_POST['images_ids']);
 
         $attachment_urls = [];
+
+        if (count($attachment_ids) < 1) {
+            throw new Exception('Please select an attachment!');
+        }
 
         foreach ($attachment_ids as $key => $attachment_id) {
             $url = wp_get_attachment_url($attachment_id);
@@ -310,7 +315,7 @@ class Listing
         update_post_meta($this->id, 'images_urls', json_encode($attachment_urls));
     }
 
-    public function to_array()
+    public function to_array(): array
     {
         return [
             'id' => $this->id,
@@ -331,9 +336,14 @@ class Listing
         ];
     }
 
-    public function get_view_listing_url()
+    public function get_view_listing_url(): string
     {
         return site_url(self::VIEW_LISTING_URL . '?listing_id=' . $this->getId());
+    }
+
+    public function is_author(int $user_id): bool
+    {
+        return $user_id === (int) $this->get_wp_post()->post_author;
     }
 
     // overcomplicating the getter method, because why not
@@ -350,6 +360,19 @@ class Listing
 
             // get the actual property name
             $property = strtolower($property);
+
+            if (empty($this->{$property}) && $property === 'featured_image_url') {
+                $seed = Str::random(10);
+                return "https://picsum.photos/seed/$seed/1200/1200";
+            } else if (empty($this->{$property}) && $property === 'images_urls') {
+                return json_encode([
+                    "https://picsum.photos/seed/" . Str::random(10) . "/1200/1200",
+                    "https://picsum.photos/seed/" . Str::random(10) . "/1200/1200",
+                    "https://picsum.photos/seed/" . Str::random(10) . "/1200/1200",
+                    "https://picsum.photos/seed/" . Str::random(10) . "/1200/1200",
+                    "https://picsum.photos/seed/" . Str::random(10) . "/1200/1200",
+                ]);
+            }
 
             // return the property
             return $this->{$property};

@@ -28,28 +28,33 @@ class ListingFormPageController
         $drive_types_arr       = Helper::get_drive_types();
         $features_arr          = Helper::get_features();
 
-        // preload the models of a brand
-        $selected_brand        = Helper::get_brands()[0];
-        $models_arr            = Helper::get_brand_models($selected_brand);
-
-
         // initialise the listing object
         $listing = isset($_GET['listing_id']) 
             ? Listing::get_listing_by_id($_GET['listing_id']) 
             : new Listing();
 
+        $models_arr = isset($_GET['listing_id']) 
+            ? Helper::get_brand_models($listing->getBrand())
+            : Helper::get_brand_models($selected_brand = Helper::get_brands()[0]);
+
         // if other users try to edit the listing, show 404
-        if (isset($_GET['listing_id']) && (int) $listing->getWpPost()->post_author !== (int) get_current_user_id()) {
+        $user_id = get_current_user_id();
+        if (isset($_GET['listing_id']) && (int) $listing->is_author($user_id)) {
             Response::not_found();
         }
 
         require_once Main::get_path_from_src('Front/partials/listing-meta-box/index.php');
+
+        Session::unset('error');
     }
 
     // POST wp-admin/admin-ajax.php
     // Payload: action=save_ab_listing
     public function save_ab_listing()
     {
+        global $wpdb;
+
+        $wpdb->query( "START TRANSACTION" );
         try {
             $this->_validate_save_post();
     
@@ -65,11 +70,15 @@ class ListingFormPageController
             $files_uploaded = $_POST['files_uploaded'] === "1";
 
             $listing->save_attachments($files, $files_uploaded);
+
+            $wpdb->query( "COMMIT" );
     
             wp_redirect( wp_get_referer() );
             exit;
         } catch (Exception $e) {
+            Session::set('listing', serialize($listing));
             Session::set('error', $e->getMessage());
+            $wpdb->query( "ROLLBACK" );
             wp_redirect( wp_get_referer() );
             exit;
         }
@@ -82,7 +91,7 @@ class ListingFormPageController
         if ( !Request::validate_nonce()['success'] ) throw new Exception('Invalid nonce!');
     }
 
-    private function _get_listing_object()
+    private function _get_listing_object(): Listing
     {
         $data['ID']                   = $_POST['listing_id'];
 

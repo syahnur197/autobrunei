@@ -39,7 +39,7 @@ class ListingCpt implements CptInterface
             'labels'            => $labels,
             'public'            => true,
             'has_archive'       => true,
-            'rewrite'           => array('slug' => 'ab-listings'),
+            'rewrite'           => array('slug' => Listing::POST_TYPE),
             'show_in_rest'      => true,
             'supports'          => $supports,
             'capability_type'   => 'post',
@@ -49,7 +49,7 @@ class ListingCpt implements CptInterface
             'register_meta_box_cb' => array( $this, 'add_meta_boxes' ),
         );
     
-        register_post_type( 'ab-listings', $args);
+        register_post_type( Listing::POST_TYPE, $args);
     }
 
     public function add_meta_boxes()
@@ -61,7 +61,7 @@ class ListingCpt implements CptInterface
             'ab-listings-id',
             'Listing',
             [$this, 'meta_box'],
-            'ab-listings',
+            Listing::POST_TYPE,
             'normal',
             'default'
         );
@@ -70,7 +70,7 @@ class ListingCpt implements CptInterface
             'sellers-note-id',
             'Seller\'s Note',
             [$this, 'sellers_note_meta_box'],
-            'ab-listings',
+            Listing::POST_TYPE,
             'normal',
             'default'
         );

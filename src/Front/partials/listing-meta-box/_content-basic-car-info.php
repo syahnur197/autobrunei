@@ -149,7 +149,7 @@
 
     <label class="ab-checkbox-container">Mark as Sold
         <input type="checkbox" class="" name="sold" value="1" 
-            <?php if ($listing->getSold() == 1): ?>
+            <?php if ((int) $listing->getSold() === 1): ?>
                 checked
             <?php endif;?>
         />

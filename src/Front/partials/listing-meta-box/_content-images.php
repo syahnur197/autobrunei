@@ -1,9 +1,13 @@
+<?php
+    use Autobrunei\Utils\Session;
+?>
+
 <div id="images" class="ab-sub-content ab-d-hide">
     <h2 class="ab-h2 no-left-padding">Image Gallery</h2>
 
     <div class="ab-featured-img-container">
 
-        <?php if ($listing->getFeaturedImageId() !== null): ?>
+        <?php if ($listing->getFeaturedImageId() !== null && !Session::exist('error')): ?>
             <img id="ab-featured-img" slt="" src="<?= $listing->getFeaturedImageUrl(); ?>"/>
             <input type="hidden" id="featured_image_index" name="featured_image_index" value="<?= $listing->getFeaturedImageIndex(); ?>" />
         <?php else: ?>
@@ -13,7 +17,7 @@
     </div>
 
     <div class="ab-img-container">
-        <?php if ($listing->getImagesIds() !== null): ?>
+        <?php if ($listing->getImagesIds() !== null && !Session::exist('error')): ?>
             <?php foreach(json_decode($listing->getImagesUrls()) as $url): ?>
                 <img src="<?= $url; ?>" class="non-featured-img" alt=""/>
             <?php endforeach; ?>

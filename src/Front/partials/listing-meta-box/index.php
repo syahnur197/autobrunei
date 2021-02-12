@@ -6,9 +6,12 @@ use Autobrunei\Utils\Session;
 
 ?>
 
-<?php if(Session::exist('error')): ?>
+<?php if(Session::exist('error')): 
 
-    <p style="font-size: 1.5em; color: red; font-weight: bold;"><?= Session::get('error'); ?></p>
+    if (Session::exist('listing')) $listing = unserialize(Session::get('listing'));
+    
+?>
+    <p style="font-size: 1.5em; color: red; font-weight: bold;"><?= Session::get('error', false); ?></p>
 
 <?php endif;?>
 <div class="ab-form-layout">
@@ -38,7 +41,7 @@ use Autobrunei\Utils\Session;
         <?php 
             // if $listing has images ids, put into selected_image_sources_array js variable
             $selected_image_sources_array = "";
-            if ($listing->getImagesIds() !== null) {
+            if ($listing->getImagesIds() !== null && !Session::exist('error')) {
                 foreach(json_decode($listing->getImagesUrls()) as $url) {
                     $selected_image_sources_array .= "'" . $url . "',";
                 }
