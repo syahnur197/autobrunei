@@ -292,6 +292,6 @@ class ListingCpt implements CptInterface
 
     private function _get_view_listing_anchor_tag(Listing $listing)
     {
-        return '<a href="' . $listing->get_view_listing_url() . '" target="_blank">View Listing</a>';
+        return '<a href="' . $listing->get_view_listing_url() . '" >View Listing</a>';
     }
 }

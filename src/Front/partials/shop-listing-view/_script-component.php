@@ -1,6 +1,10 @@
 <script>
 
-    <?php // should have used vue js for this 🤦‍♂️?>
+    <?php // should have used vue js for this 🤦‍♂️
+
+use Autobrunei\Entities\Listing;
+
+?>
 
     // to hold the filtered attributes
     let filtered_attributes = {};
@@ -31,7 +35,7 @@
                 <img class="ab-listing-image" src="${listing_object.featured_image_url}">
 
                 <div class="ab-listing-description">
-                    <span class="ab-listing-title"><a target="_blank" href="${listing_object.url}">${listing_title}</a></span>
+                    <span class="ab-listing-title"><a href="${listing_object.url}">${listing_title}</a></span>
                     <br>
 
                     <div class="ab-meta-description">
@@ -213,10 +217,11 @@
         let compared_listings = []; 
 
 
-        const comparison_container_class = '.ab-compare-container';
-        const add_to_compare_btn_class = '.add-to-compare-btn';
-        const compared_listings_container = '.ab-compared-listings-container';
+        const comparison_container_class     = '.ab-compare-container';
+        const add_to_compare_btn_class       = '.add-to-compare-btn';
+        const compared_listings_container    = '.ab-compared-listings-container';
         const dismiss_compared_listing_class = '.ab-dismiss-compared-listing';
+        const compare_button_class           = '.ab-compare-button';
 
         function create_compared_listing_button(title, id) {
             return `<span class="ab-compared-listing">${title} <span class="ab-dismiss-compared-listing" data-listing-id="${id}">x</span></span>`;
@@ -247,8 +252,8 @@
                 return;
             }
 
-            if (compared_listings.length >= 2) {
-                alert('You cannot add more than 2 vehicles to compare!');
+            if (compared_listings.length >= 3) {
+                alert('You cannot add more than 3 vehicles to compare!');
                 return;
             }
 
@@ -277,6 +282,30 @@
             }
 
             $(compared_listings_container).html(create_compared_listing_buttons());
-        })
+        });
+
+        $(document).on('click', compare_button_class, function(event) {
+
+            if (compared_listings.length <= 1) {
+                alert('You must select more than 1 vehicles to compare!');
+                return;
+            }
+
+            let listing_ids = [];
+
+            let query_string = ``;
+
+            for (let i = 0; i < compared_listings.length; i++) {
+                query_string += `listing_ids[]=${compared_listings[i].listing_id}&`;
+            }
+
+            query_string = query_string.slice(0, -1);
+
+            const site_url = document.location.origin;
+
+            const url = `${site_url}/<?= Listing::LISTINGS_COMPARISON_URL; ?>?${query_string}`;
+
+            window.location.href = url;
+        });
     });
 </script>

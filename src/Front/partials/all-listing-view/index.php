@@ -108,7 +108,7 @@ use Autobrunei\Main;
 
                 <div class="ab-listing-detail">
                     <h5 class="ab-listing-data">
-                        <a target="_blank" href="<?= $listing->get_view_listing_url(); ?>"><?= $listing->getTitle(); ?></a>
+                        <a href="<?= $listing->get_view_listing_url(); ?>"><?= $listing->getTitle(); ?></a>
                     </h5>
                     <h5 class="ab-listing-data">
                         B$ <?= $listing->getSalePrice(); ?>
@@ -134,7 +134,7 @@ use Autobrunei\Main;
     ?>
 </div>
 
-<?php require_once Main::get_path_from_src('Front/partials/shared/_update-model-script.php'); ?>
+<?php require_once Main::get_path_from_src('Front/partials/_shared/_update-model-script.php'); ?>
 
 <script>
 jQuery(document).ready(function($) {

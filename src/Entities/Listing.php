@@ -41,9 +41,11 @@ use WP_Post;
 class Listing
 {
 
-    const POST_TYPE = 'ab-listings';
+    const POST_TYPE               = 'ab-listings';
 
-    const VIEW_LISTING_URL = 'view-listing';
+    const VIEW_LISTING_URL        = 'view-listing';
+
+    const LISTINGS_COMPARISON_URL = 'listings-comparison';
 
     const TIME_LIMIT = '+7 day';
 
@@ -331,7 +333,7 @@ class Listing
             'mileage' => $this->mileage,
             'price' => $this->price,
             'sale_price' => $this->sale_price,
-            'featured_image_url' => $this->featured_image_url,
+            'featured_image_url' => $this->getFeaturedImageUrl(),
             'url' => $this->get_view_listing_url(),
         ];
     }

@@ -29,7 +29,7 @@ use Autobrunei\Utils\Session;
     </div>
 </div>
 
-<?php require_once Main::get_path_from_src('Front/partials/shared/_update-model-script.php'); ?>
+<?php require_once Main::get_path_from_src('Front/partials/_shared/_update-model-script.php'); ?>
 
 
 <script>

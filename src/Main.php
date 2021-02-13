@@ -18,6 +18,7 @@ use Autobrunei\Admin\Controller as AdminController;
 use Autobrunei\Controllers\Admin\ListingController;
 use Autobrunei\Controllers\Front\ListingFormPageController;
 use Autobrunei\Controllers\Front\ListingPageController;
+use Autobrunei\Controllers\Front\ListingsComparisonController;
 use Autobrunei\Controllers\Front\ListingShopViewController;
 use Autobrunei\Controllers\Front\ViewListingPageController;
 use Autobrunei\Front\Controller as FrontController;
@@ -158,12 +159,13 @@ class Main {
 	 */
 	private function define_public_hooks() {
 		
-		$plugin_public = new FrontController( $this->get_plugin_name(), $this->get_version() );
-		$listing_page  = new ListingPageController();
-		$listing_form  = new ListingFormPageController();
-		$listing_shop  = new ListingShopViewController();
-		$view_listing  = new ViewListingPageController();
-		$sessions      = new Session();
+		$plugin_public       = new FrontController( $this->get_plugin_name(), $this->get_version() );
+		$listing_page        = new ListingPageController();
+		$listing_form        = new ListingFormPageController();
+		$listing_shop        = new ListingShopViewController();
+		$view_listing        = new ViewListingPageController();
+		$listings_comparison = new ListingsComparisonController();
+		$sessions            = new Session();
 		
 		// initialise session
 		$this->loader->add_action( 'init', $sessions, 'register' );
@@ -183,6 +185,9 @@ class Main {
 
 			// view listing
 			$this->loader->add_shortcode( 'view_listing', $view_listing, 'view_listing' );
+
+			// listings comparison
+			$this->loader->add_shortcode( 'listings_comparison', $listings_comparison, 'listings_comparison' );
 		}
 		
 		$this->loader->add_action( 'wp_ajax_save_ab_listing', $listing_form, 'save_ab_listing' );
