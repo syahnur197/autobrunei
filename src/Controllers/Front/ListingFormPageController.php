@@ -9,6 +9,7 @@ use Autobrunei\Utils\Request;
 use Autobrunei\Utils\Response;
 use Autobrunei\Utils\Session;
 use Exception;
+use InvalidArgumentException;
 
 class ListingFormPageController
 {
@@ -60,6 +61,8 @@ class ListingFormPageController
     
             $listing = $this->_get_listing_object();
 
+            $this->_validate_listing($listing);
+
             $files = $_FILES["listing_images"];
 
             $success = $listing->save();
@@ -73,10 +76,13 @@ class ListingFormPageController
 
             $wpdb->query( "COMMIT" );
     
-            wp_redirect( get_permalink( wc_get_page_id( 'myaccount' ) ).'/vehicle-listing' );
-            // wp_redirect( wp_get_referer() );
+            // wp_redirect( get_permalink( wc_get_page_id( 'myaccount' ) ).'/vehicle-listing' );
+            wp_redirect( wp_get_referer() );
             exit;
         } catch (Exception $e) {
+
+            $listing  = $listing instanceof Listing ? $listing : new Listing();
+
             Session::set('listing', serialize($listing));
             Session::set('error', $e->getMessage());
             $wpdb->query( "ROLLBACK" );
@@ -90,6 +96,7 @@ class ListingFormPageController
         if ( !Request::validate_post_request()['success'] ) throw new Exception('Not a post request!');
 
         if ( !Request::validate_nonce()['success'] ) throw new Exception('Invalid nonce!');
+
     }
 
     private function _get_listing_object(): Listing
@@ -113,9 +120,25 @@ class ListingFormPageController
         $data['sold']                 = $_POST['sold'] ?? '';
         $data['features']             = $_POST['features'] ?? []; // this is an array
         $data['sellers_note']         = $_POST['sellers_note'];
+        $data['phone_no']             = $_POST['phone_no'];
         $data['featured_image_index'] = $_POST['featured_image_index'];
 
         return new Listing((object) $data);
+    }
+
+    private function _validate_listing(Listing $listing)
+    {
+        if (strlen((string) $listing->getPhoneNo()) !== Listing::PHONE_NO_LENGTH) {
+            throw new InvalidArgumentException('Phone number length must be ' . Listing::PHONE_NO_LENGTH . ' digits!');
+        }
+
+        if (empty($listing->getSalePrice()) || $listing->getSalePrice() === '') {
+            throw new InvalidArgumentException('Sale price must not be empty!');
+        }
+
+        if (empty($listing->getMileage()) || $listing->getMileage() === '') {
+            throw new InvalidArgumentException('Mileage must not be empty!');
+        }
     }
 
 }

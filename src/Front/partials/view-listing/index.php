@@ -99,7 +99,7 @@
             <lable>Engine No: </lable><strong><?= $listing->getEngineNo(); ?> </strong><br>
             <lable>Mileage: </lable><strong><?= $listing->getMileage(); ?> </strong><br>
             <lable>Condition: </lable><strong><?= $listing->getCondition(); ?> </strong><br>
-            <lable>>Price: B$ </lable><strong<?= $listing->getPrice(); ?> </strong><br>
+            <lable>Price: B$ </lable><strong><?= $listing->getPrice(); ?> </strong><br>
             <lable>Sale Price: B$ </lable><strong><?= $listing->getSalePrice(); ?> </strong>
             <div class="vc_empty_space" style="height: 32px"></div>
         </div>
@@ -145,8 +145,10 @@
         <h4>Contact the seller</h4>
         <div class="vc_empty_space" style="height: 32px"></div>
         <div>
-            <h5>Mobile no: 7********</h5>
-            <a href="https://wa.me/+6737117717?text=I'm%20interested%20in%20your%20car"><img src="/wp-content/uploads/2021/02/WhatsApp-icon-PNG.png" width="80px"/></a>
+            <h5>Mobile no: <?= $listing->getPhoneNo(); ?></h5>
+            <a href="<?= $listing->get_whatsapp_link(); ?>">
+                <img src="/wp-content/uploads/2021/02/WhatsApp-icon-PNG.png" width="80px"/>
+            </a>
         </div>
     </div>
 

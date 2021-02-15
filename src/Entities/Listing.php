@@ -7,6 +7,7 @@ use Autobrunei\Utils\FileUploader;
 use Autobrunei\Utils\Response;
 use Autobrunei\Utils\Str;
 use Exception;
+use InvalidArgumentException;
 use WP_Post;
 
 /**
@@ -30,6 +31,7 @@ use WP_Post;
  * @method bool getSold()
  * @method array getFeatures() Get json encoded features. Decode to get features as array
  * @method string getSellersNote()
+ * @method string getPhoneNo()
  * @method string getFeaturedImageId()
  * @method string getFeaturedImageUrl()
  * @method string getImagesIds()
@@ -47,7 +49,13 @@ class Listing
 
     const LISTINGS_COMPARISON_URL = 'listings-comparison';
 
-    const TIME_LIMIT = '+7 day';
+    const TIME_LIMIT              = '+7 day';
+
+    const DEFAULT_PHONE_NO        = '6738885555';
+
+    const PHONE_NO_LENGTH         = 10;
+
+    const MESSAGE                 = "I'm interested in your car.";
 
     private $id;
 
@@ -68,6 +76,7 @@ class Listing
     private string $sold;
     private $features;
     private string $sellers_note;
+    private string $phone_no;
     private string $featured_image_url;
     private $featured_image_id;
     private $featured_image_index;
@@ -171,6 +180,7 @@ class Listing
         $this->sold = '';
         $this->features = [];
         $this->sellers_note = '';
+        $this->phone_no = self::DEFAULT_PHONE_NO;
         $this->featured_image_url = '';
         $this->featured_image_id = '';
         $this->images_urls = '';
@@ -195,6 +205,7 @@ class Listing
         $this->sold = $data->sold ?? '';
         $this->features = $data->features ?? [];
         $this->sellers_note = $data->sellers_note ?? '';
+        $this->phone_no = $data->phone_no ?? '';
         $this->featured_image_index = $data->featured_image_index ?? '';
         $this->featured_image_url = $data->featured_image_url ?? '';
 
@@ -343,6 +354,13 @@ class Listing
         return site_url(self::VIEW_LISTING_URL . '?listing_id=' . $this->getId());
     }
 
+    public function get_whatsapp_link(): string
+    {
+        $phone_no = "+" . $this->phone_no;
+
+        return "https://wa.me/" . $phone_no . "?text=" . urlencode(self::MESSAGE);
+    }
+
     public function is_author(int $user_id): bool
     {
         return $user_id === (int) $this->get_wp_post()->post_author;
@@ -363,18 +381,18 @@ class Listing
             // get the actual property name
             $property = strtolower($property);
 
-            if (empty($this->{$property}) && $property === 'featured_image_url') {
-                $seed = Str::random(10);
-                return "https://picsum.photos/seed/$seed/1200/1200";
-            } else if (empty($this->{$property}) && $property === 'images_urls') {
-                return json_encode([
-                    "https://picsum.photos/seed/" . Str::random(10) . "/1200/1200",
-                    "https://picsum.photos/seed/" . Str::random(10) . "/1200/1200",
-                    "https://picsum.photos/seed/" . Str::random(10) . "/1200/1200",
-                    "https://picsum.photos/seed/" . Str::random(10) . "/1200/1200",
-                    "https://picsum.photos/seed/" . Str::random(10) . "/1200/1200",
-                ]);
-            }
+            // if (empty($this->{$property}) && $property === 'featured_image_url') {
+            //     $seed = Str::random(10);
+            //     return "https://picsum.photos/seed/$seed/1200/1200";
+            // } else if (empty($this->{$property}) && $property === 'images_urls') {
+            //     return json_encode([
+            //         "https://picsum.photos/seed/" . Str::random(10) . "/1200/1200",
+            //         "https://picsum.photos/seed/" . Str::random(10) . "/1200/1200",
+            //         "https://picsum.photos/seed/" . Str::random(10) . "/1200/1200",
+            //         "https://picsum.photos/seed/" . Str::random(10) . "/1200/1200",
+            //         "https://picsum.photos/seed/" . Str::random(10) . "/1200/1200",
+            //     ]);
+            // }
 
             // return the property
             return $this->{$property};

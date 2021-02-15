@@ -135,6 +135,11 @@
         <textarea name="sellers_note" id="sellers_note" cols="30" rows="10"><?= $listing->getSellersNote(); ?></textarea>
     </div>
 
+    <div class="ab-meta-grid">
+        <label for="phone_no"><strong>Seller's Phone No.</strong></label>
+        <input type="number" name="phone_no" id="phone_no" value="<?= $listing->getPhoneNo(); ?>" step="1" min="10" max="10"/>
+    </div>
+
     <h2 class="ab-h2 no-left-padding">Price</h2>
     
     <div class="ab-meta-grid">

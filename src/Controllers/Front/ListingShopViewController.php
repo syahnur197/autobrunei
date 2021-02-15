@@ -187,6 +187,7 @@ class ListingShopViewController
                 'key'       => 'mileage',
                 'value'     => (int) sanitize_text_field($_GET['mileage_minimum']),
                 'compare'   => '>=',
+                'type'      => 'NUMERIC',
             ];
         }
 
@@ -195,6 +196,7 @@ class ListingShopViewController
                 'key'       => 'mileage',
                 'value'     => (int) sanitize_text_field($_GET['mileage_maximum']),
                 'compare'   => '<=',
+                'type'      => 'NUMERIC',
             ];
         }
 
@@ -203,6 +205,7 @@ class ListingShopViewController
                 'key'       => 'sale_price',
                 'value'     => (int) sanitize_text_field($_GET['price_minimum']),
                 'compare'   => '>=',
+                'type'      => 'NUMERIC',
             ];
         }
 
@@ -211,6 +214,7 @@ class ListingShopViewController
                 'key'       => 'sale_price',
                 'value'     => (int) sanitize_text_field($_GET['price_maximum']),
                 'compare'   => '<=',
+                'type'      => 'NUMERIC',
             ];
         }
 
