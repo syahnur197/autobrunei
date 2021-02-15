@@ -39,7 +39,7 @@ class ListingFormPageController
 
         // if other users try to edit the listing, show 404
         $user_id = get_current_user_id();
-        if (isset($_GET['listing_id']) && (int) $listing->is_author($user_id)) {
+        if (isset($_GET['listing_id']) && !$listing->is_author($user_id)) {
             Response::not_found();
         }
 
