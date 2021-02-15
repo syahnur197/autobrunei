@@ -102,6 +102,20 @@
     </div>
     <div class="ab-range-container">
         <label for="price_maximum">Maximum</label>
-        <input type="number" name="price_maximum" id="price_maximum" value="" class="attribute_filter"/>
+       <input type="number" name="price_maximum" id="price_maximum" value="" class="attribute_filter"/>
+        <!--<input type="range" name="rangeInput" min="300" max="100000" onchange="updateTextInput(this.value);">-->
     </div>
+    <!--<div class="ab-range-container">
+    <label for="price_maximum"></label>
+        <input type="number" name="price_maximum" id="price_maximum" value="" class="attribute_filter" style="width: 100px;">
+    </div>-->
+
 </div>
+
+<script>
+    function updateTextInput(val) {
+          document.getElementById('price_maximum').value=val;
+          document.getElementById('price_maximum').click(); 
+    }
+
+</script>

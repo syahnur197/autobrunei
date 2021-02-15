@@ -73,7 +73,8 @@ class ListingFormPageController
 
             $wpdb->query( "COMMIT" );
     
-            wp_redirect( wp_get_referer() );
+            wp_redirect( get_permalink( wc_get_page_id( 'myaccount' ) ).'/vehicle-listing' );
+            // wp_redirect( wp_get_referer() );
             exit;
         } catch (Exception $e) {
             Session::set('listing', serialize($listing));

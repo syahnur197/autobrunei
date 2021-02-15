@@ -42,10 +42,10 @@ class ListingPageController
     private function _filter_listings($meta_query)
     {
 
-        if (isset($_GET['condition'])) {
+        if (isset($_GET['year'])) {
             $meta_query[]  = [
-                'key'       => 'condition',
-                'value'     => sanitize_text_field($_GET['condition']),
+                'key'       => 'year',
+                'value'     => sanitize_text_field($_GET['year']),
                 'compare'   => '=',
 
             ];

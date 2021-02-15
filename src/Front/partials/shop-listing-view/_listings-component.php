@@ -9,7 +9,9 @@
             $listing = new Listing($loop->post);
         ?>
         <div class="ab-listing">
-            <img class="ab-listing-image" src="<?= $listing->getFeaturedImageUrl(); ?>">
+            <a href="<?= $listing->get_view_listing_url(); ?>">
+                <img class="ab-listing-image" src="<?= $listing->getFeaturedImageUrl(); ?>">
+            </a>
 
             <div class="ab-listing-description">
                 <span class="ab-listing-title"><?= $listing->getBrand() . ' ' . $listing->getModel() . " ({$listing->getYear()})"; ?></span>
@@ -41,6 +43,7 @@
                 <button type="button">
                     Add to compare
                 </button>
+
             </div>
         </div>
     <?php endwhile; ?>

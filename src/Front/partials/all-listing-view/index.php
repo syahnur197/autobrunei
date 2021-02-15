@@ -17,8 +17,8 @@
 .ab-nav-container {
     display: grid;
     grid-template-columns: 25% 25% 25% 25%;
-    padding-left: 10px;
-    grid-gap: 20px;
+    padding: 10px;
+    grid-gap: 1px;
     background-color: #11323E;
     padding-top: 15px;
     padding-bottom: 15px;
@@ -26,17 +26,21 @@
 
 .ab-input {
     font-size: 1.3em !important;
+	padding: 20px 30px;
+	width: 98%;
 }
 
 .ab-listings-container {
     display: grid;
     grid-template-columns: 25% 25% 25% 25%;
-    grid-gap: 10px
+    grid-gap: 15px
 }
 
 .ab-listing .ab-listing-image {
-    width: 250px;
-    height: 200px;
+    /* width: 250px;
+    height: 200px; */
+    height: 75%; width: 100%; object-fit: contain;
+
 }
 
 .ab-listing-detail {
@@ -45,9 +49,40 @@
 }
 
 .ab-listing-detail .ab-listing-data{
-    font-size: 0.7em;
+    font-size: 1em;
 }
 
+.ab-pricing {
+    font-size: 1.5em !important;
+    font-weight:500;
+    color: #0c6913;
+}
+
+#search_button {
+	background: #cac8c8;
+    color: #000;
+    border: 0px;
+}
+
+#search_button:hover {
+	background: #fff;
+    color: #000;
+    border: 2px solid #000;
+	font-weight: 500;
+}
+
+@media only screen and (max-width: 768px) {
+    .ab-nav-container {
+        display: block;
+        grid-template-columns: 100%;
+    }
+    .ab-input {
+        width: 100%;
+    }
+    .ab-listings-container {
+        display: block;
+    }
+}
 
 </style>
 
@@ -56,21 +91,12 @@ use Autobrunei\Entities\Listing;
 use Autobrunei\Main;
 ?>
 
-<div>
+<br>
+<div style="padding:2px;">
     <div class="ab-nav-container">
         <div class="ab-nav-content">
-            <select class="ab-input ab-dropdown" name="condition">
-                <option <?= !isset($_GET['condition']) ? 'selected' : ''; ?>>Choose Condition</option>
-                <?php foreach($conditions_arr as $key => $condition): ?>
-                    <option value="<?= $condition ?>" 
-                        <?= isset($_GET['condition']) && $_GET['condition'] == $condition ? 'selected' : ''; ?>
-                    ><?= $condition; ?></option>
-                <?php endforeach;?>
-            </select>
-        </div>
-        <div class="ab-nav-content">
             <select class="ab-input ab-dropdown" name="brand" id="brand">
-                <option <?= !isset($_GET['condition']) ? 'brand' : ''; ?>>Choose Brand</option>
+                <option <?= !isset($_GET['brand']) ? 'brand' : ''; ?>>Choose Brand</option>
                 <?php foreach($brands_arr as $key => $brand): ?>
                     <option value="<?= $brand ?>"
                         <?= isset($_GET['brand']) && $_GET['brand'] == $brand ? 'selected' : ''; ?>
@@ -80,12 +106,27 @@ use Autobrunei\Main;
         </div>
         <div class="ab-nav-content">
             <select class="ab-input ab-dropdown" name="model" id="model">
-                <option <?= !isset($_GET['condition']) ? 'model' : ''; ?>>Choose Model</option>
+                <option <?= !isset($_GET['model']) ? 'model' : ''; ?>>Choose Model</option>
                 <?php foreach($models_arr as $key => $model): ?>
                     <option value="<?= $model ?>"
                         <?= isset($_GET['model']) && $_GET['model'] == $model ? 'selected' : ''; ?>
                     ><?= $model; ?></option>
                 <?php endforeach;?>
+            </select>
+        </div>
+		<?php 
+            $current_year = date('Y');
+            $years        = 50;
+        ?>
+		<div class="ab-nav-content">
+            <select class="ab-input ab-dropdown" name="year" id="year">
+                <option <?= !isset($_GET['year']) ? 'year' : ''; ?>>Choose Year</option>
+				<?php for ($i = 0; $i < $years; $i++): ?>
+					<?php $year = $current_year - $i; ?>
+				    <option value="<?= $year ?>"
+                        <?= isset($_GET['year']) && $_GET['year'] == $model ? 'selected' : ''; ?>
+                    ><?= $year; ?></option>
+				<?php endfor; ?>
             </select>
         </div>
         <div class="ab-nav-content">
@@ -96,6 +137,8 @@ use Autobrunei\Main;
     </div>
 </div>
 
+<br>
+
 <div class="ab-listings-container">
     <?php if($loop->have_posts()): ?>
         <?php while ($loop->have_posts()): ?>
@@ -103,14 +146,17 @@ use Autobrunei\Main;
                 $loop->the_post();
                 $listing = new Listing($loop->post);
             ?>
+        
             <div class="ab-listing">
-                <img class="ab-listing-image" src="<?= $listing->getFeaturedImageUrl(); ?>">
+                <a href="<?= $listing->get_view_listing_url(); ?>">
+                    <img class="ab-listing-image" src="<?= $listing->getFeaturedImageUrl(); ?>">
+                </a>
 
                 <div class="ab-listing-detail">
                     <h5 class="ab-listing-data">
                         <a href="<?= $listing->get_view_listing_url(); ?>"><?= $listing->getTitle(); ?></a>
                     </h5>
-                    <h5 class="ab-listing-data">
+                    <h5 class="ab-listing-data ab-pricing">
                         B$ <?= $listing->getSalePrice(); ?>
                     </h5>
                 </div>
@@ -125,7 +171,9 @@ use Autobrunei\Main;
                     <?= $listing->getTransmission(); ?>
                     </h6>
                 </div>
+                <br>
             </div>
+
         <?php endwhile; ?>
     <?php endif; ?>
     <?php 

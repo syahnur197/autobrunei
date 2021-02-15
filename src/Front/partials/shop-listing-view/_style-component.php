@@ -8,11 +8,11 @@
 }
 
 .ab-filter-container {
-    background-color: red;
+    background-color: #d0c3bd;
 }
 
 .ab-shop-listings-container {
-    background-color: green;
+    background-color: #fff;
 }
 
 .ab-compare-container {
@@ -50,8 +50,12 @@
     padding: 1rem;
 }
 
+.ab-listings-container p{
+    padding-bottom: 2em;
+}
+
 .ab-listing {
-    background-color: lightblue;
+    /* background-color: lightblue; */
     padding: 1rem;
     display: grid;
     grid-template-columns: 30% 50% 20%;
@@ -60,9 +64,10 @@
 
 .ab-pagination-btn {
     cursor: pointer;
-    background-color: orangered;
+    background-color: #fff;
+    color: #000;
     padding: 1rem;
-    margin-top: 1rem;
+    margin-top: 5rem;
     margin-right: 1rem;
 }
 
@@ -71,8 +76,9 @@
 }
 
 .ab-listing-image {
-    width: 250px;
-    height: 200px;
+    height: 75%; 
+    width: 100%; 
+    object-fit: contain;
     border: 1px solid black;
 }
 
@@ -83,7 +89,7 @@
 }
 
 .ab-listing-pricing {
-    font-size: 1.3em;
+    font-size: 2em;
     font-weight: bold;
 }
 
@@ -138,4 +144,28 @@
     cursor: pointer;
 }
 
+.ab-listing-description {
+    padding-left: 20px;
+}
+
+.ab-listing-title a {
+    color: #000;
+}
+
+
+.ab-meta-description {
+    color: #717171;
+}
+
+.woocommerce-ordering, .products {
+    display: none;
+}
+
+.attribute_filter {
+    padding: 10px !important;
+}
+
+.add-to-compare-btn {
+    padding:15px;
+}
 </style>

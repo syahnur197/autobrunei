@@ -17,8 +17,11 @@ class ListingsComparisonController
         
         $listing_ids = $_GET['listing_ids'];
 
+        $listings = [];
+
+        
         foreach ($listing_ids as $key => $listing_id) {
-            $listing                    = Listing::get_listing_by_id($listing_id);
+            $listings[]                 = $listing= Listing::get_listing_by_id($listing_id);
 
             $listings_nos[]             = "Listing No. " . ($key+1);
 

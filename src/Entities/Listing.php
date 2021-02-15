@@ -69,7 +69,7 @@ class Listing
     private $features;
     private string $sellers_note;
     private string $featured_image_url;
-    private string $featured_image_id;
+    private $featured_image_id;
     private $featured_image_index;
     private $images_ids;
     private $images_urls;
@@ -87,7 +87,7 @@ class Listing
 
         $this->_initialise_listing($data);
 
-        $this->title = $this->brand . ' ' . $this->model . ' ' . $this->engine_no . ' ' . $this->year;
+        $this->title = $this->brand . ' ' . $this->model . ' ' . $this->year;
     }
 
     public function save()
@@ -205,7 +205,7 @@ class Listing
             $this->id = $data->ID;
 
             // I've added the below properties on 4 february for viewing and edit existing listing purpose
-            $this->featured_image_id = (string) $data->featured_image_id ?? '';
+            $this->featured_image_id = $data->featured_image_id ?? '';
             $this->images_ids = $data->images_ids ?? '';
             $this->images_urls = $data->images_urls ?? '';
             // edit 4 february
