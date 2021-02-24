@@ -116,7 +116,6 @@ class ListingFormPageController
         $data['condition']            = $_POST['condition'];
         $data['mileage']              = $_POST['mileage'];
         $data['price']                = $_POST['price'];
-        $data['sale_price']           = $_POST['sale_price'];
         $data['sold']                 = $_POST['sold'] ?? '';
         $data['features']             = $_POST['features'] ?? []; // this is an array
         $data['sellers_note']         = $_POST['sellers_note'];
@@ -132,7 +131,7 @@ class ListingFormPageController
             throw new InvalidArgumentException('Phone number length must be ' . Listing::PHONE_NO_LENGTH . ' digits!');
         }
 
-        if (empty($listing->getSalePrice()) || $listing->getSalePrice() === '') {
+        if (empty($listing->getPrice()) || $listing->getPrice() === '') {
             throw new InvalidArgumentException('Sale price must not be empty!');
         }
 

@@ -27,7 +27,6 @@ use WP_Post;
  * @method string getCondition()
  * @method string getMileage() Get mileage in kilometre
  * @method string getPrice() Get "original" price
- * @method string getSalePrice() Get Sale Price
  * @method bool getSold()
  * @method array getFeatures() Get json encoded features. Decode to get features as array
  * @method string getSellersNote()
@@ -57,6 +56,8 @@ class Listing
 
     const MESSAGE                 = "I'm interested in your car.";
 
+    const SUB_END_DATE            = '_subscription_end_date';
+
     private $id;
 
     private string $title;
@@ -72,7 +73,6 @@ class Listing
     private string $condition;
     private string $mileage;
     private string $price;
-    private string $sale_price;
     private string $sold;
     private $features;
     private string $sellers_note;
@@ -176,7 +176,6 @@ class Listing
         $this->condition = '';
         $this->mileage = '';
         $this->price = '';
-        $this->sale_price = '';
         $this->sold = '';
         $this->features = [];
         $this->sellers_note = '';
@@ -201,7 +200,6 @@ class Listing
         $this->condition = $data->condition ?? '';
         $this->mileage = $data->mileage ?? '';
         $this->price = $data->price ?? '';
-        $this->sale_price = $data->sale_price ?? '';
         $this->sold = $data->sold ?? '';
         $this->features = $data->features ?? [];
         $this->sellers_note = $data->sellers_note ?? '';
@@ -214,11 +212,12 @@ class Listing
         if (isset($data->ID)) {
             // existing listing
             $this->id = $data->ID;
-
+            
             // I've added the below properties on 4 february for viewing and edit existing listing purpose
             $this->featured_image_id = $data->featured_image_id ?? '';
             $this->images_ids = $data->images_ids ?? '';
             $this->images_urls = $data->images_urls ?? '';
+            $this->end_date = $data->end_date ?? '';
             // edit 4 february
 
             $this->_parse_features();
@@ -292,6 +291,13 @@ class Listing
                 update_post_meta($this->id, $key, $data);
             }
         }
+
+        // set subscription start date if it is not yet (during creation)
+        if (! metadata_exists( 'post', $this->getId(), self::SUB_END_DATE )) {
+            // set the subscription start date as today for sorting purposes
+            $today_in_unix = strtotime(date("Y-m-d"));
+            update_post_meta($this->getId(), self::SUB_END_DATE, $today_in_unix );
+        }
     }
 
     public function save_attachments($files, $files_uploaded): void
@@ -343,7 +349,6 @@ class Listing
             'condition' => $this->condition,
             'mileage' => $this->mileage,
             'price' => $this->price,
-            'sale_price' => $this->sale_price,
             'featured_image_url' => $this->getFeaturedImageUrl(),
             'url' => $this->get_view_listing_url(),
         ];

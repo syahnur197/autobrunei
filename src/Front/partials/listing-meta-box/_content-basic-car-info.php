@@ -146,11 +146,6 @@
         <label for="price"><strong>Price (B$)</strong></label>
         <input type="number" name="price" id="price" value="<?= $listing->getPrice(); ?>" required/>
     </div>
-    
-    <div class="ab-meta-grid">
-        <label for="sale_price"><strong>Sale Price (B$)</strong></label>
-        <input type="number" name="sale_price" id="sale_price" value="<?= $listing->getSalePrice(); ?>" />
-    </div>
 
     <label class="ab-checkbox-container">Mark as Sold
         <input type="checkbox" class="" name="sold" value="1" 

@@ -91,6 +91,12 @@ class ListingShopViewController
             'paged'          => $paged,
             'post_type'      => Listing::POST_TYPE,
             'meta_query'     => $this->_get_meta_query($meta_query),
+        
+            // order by subscription end date, the one that expires 
+            // the latest will be first in the list
+            'order'          => 'DESC',
+            'orderby'        => 'meta_value_num',
+            'meta_key'       => Listing::SUB_END_DATE,
         ];
 
         return new WP_Query($args);
@@ -202,7 +208,7 @@ class ListingShopViewController
 
         if (isset($_GET['price_minimum']) && $_GET['price_minimum'] !== '') {
             $meta_query[]  = [
-                'key'       => 'sale_price',
+                'key'       => 'price',
                 'value'     => (int) sanitize_text_field($_GET['price_minimum']),
                 'compare'   => '>=',
                 'type'      => 'NUMERIC',
@@ -211,7 +217,7 @@ class ListingShopViewController
 
         if (isset($_GET['price_maximum']) && $_GET['price_maximum'] !== '') {
             $meta_query[]  = [
-                'key'       => 'sale_price',
+                'key'       => 'price',
                 'value'     => (int) sanitize_text_field($_GET['price_maximum']),
                 'compare'   => '<=',
                 'type'      => 'NUMERIC',

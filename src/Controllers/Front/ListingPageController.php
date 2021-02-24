@@ -27,11 +27,17 @@ class ListingPageController
         $paged = (get_query_var('paged')) ? get_query_var('paged') : 1;
 
         $args = [
-            'posts_per_page' => 40, 
+            'posts_per_page' => -1, 
             'post_status'    => 'publish',
             'paged'          => $paged,
             'post_type'      => Listing::POST_TYPE,
             'meta_query'     => $this->_filter_listings($meta_query),
+        
+            // order by subscription end date, the one that expires 
+            // the latest will be first in the list
+            'order'          => 'DESC',
+            'orderby'        => 'meta_value_num',
+            'meta_key'       => Listing::SUB_END_DATE,
         ];
 
         $loop = new WP_Query($args);

@@ -35,7 +35,7 @@
 
             <div class="ab-listing-description">
                 <span class="ab-listing-pricing">
-                    B$ <?= $listing->getSalePrice(); ?>
+                    B$ <?= $listing->getPrice(); ?>
                 </span>
 
                 <br>

@@ -56,7 +56,7 @@ use Autobrunei\Entities\Listing;
 
                 <div class="ab-listing-description">
                     <span class="ab-listing-pricing">
-                        B$ ${listing_object.sale_price}
+                        B$ ${listing_object.price}
                     </span>
 
                     <br>

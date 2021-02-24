@@ -168,7 +168,6 @@ class ListingCpt implements CptInterface
         $data['condition']          = $_POST['condition'];
         $data['mileage']            = $_POST['mileage'];
         $data['price']              = $_POST['price'];
-        $data['sale_price']         = $_POST['sale_price'];
         $data['sold']               = $_POST['sold'] ?? '';
         $data['features']           = $_POST['features']; // this is an array
         $data['sellers_note']       = $_POST['sellers_note'];
@@ -245,6 +244,7 @@ class ListingCpt implements CptInterface
 
     public function set_custom_columns($columns)
     {
+        $columns['expired_at']  = __('Expired At');
         $columns['id']          = __('ID');
 		$columns['brand']       = __('Brand');
 		$columns['model']       = __('Model');
@@ -262,6 +262,9 @@ class ListingCpt implements CptInterface
         $listing = Listing::get_listing_by_id($post_id);
 
         switch ($column) {
+            case 'expired_at':
+                echo date('Y/m/d h:i a', $listing->getEndDate());
+                break;
             case 'id':
                 echo $listing->getId();
                 break;

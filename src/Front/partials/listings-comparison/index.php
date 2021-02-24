@@ -71,7 +71,7 @@ td .ab-featured-image {
         </tr>
         <tr>
             <td>Sale Price</td>
-            <?= Str::repeater($listings_sale_prices, "<td>BND [placeholder]</td>"); ?>
+            <?= Str::repeater($listings_prices, "<td>BND [placeholder]</td>"); ?>
         </tr>
         <tr>
             <td>Features</td>

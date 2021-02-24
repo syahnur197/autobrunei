@@ -100,7 +100,6 @@
             <lable>Mileage: </lable><strong><?= $listing->getMileage(); ?> </strong><br>
             <lable>Condition: </lable><strong><?= $listing->getCondition(); ?> </strong><br>
             <lable>Price: B$ </lable><strong><?= $listing->getPrice(); ?> </strong><br>
-            <lable>Sale Price: B$ </lable><strong><?= $listing->getSalePrice(); ?> </strong>
             <div class="vc_empty_space" style="height: 32px"></div>
         </div>
         </div>

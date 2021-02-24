@@ -157,7 +157,7 @@ use Autobrunei\Main;
                         <a href="<?= $listing->get_view_listing_url(); ?>"><?= $listing->getTitle(); ?></a>
                     </h5>
                     <h5 class="ab-listing-data ab-pricing">
-                        B$ <?= $listing->getSalePrice(); ?>
+                        B$ <?= $listing->getPrice(); ?>
                     </h5>
                 </div>
 

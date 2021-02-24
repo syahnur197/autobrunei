@@ -39,7 +39,6 @@ class ListingsComparisonController
             $listings_mileages[]        = $listing->getMileage();
             $listings_conditions[]      = $listing->getCondition();
             $listings_prices[]          = $listing->getPrice();
-            $listings_sale_prices[]     = $listing->getSalePrice();
 
             $features                   =  $listing->getFeatures();
 
